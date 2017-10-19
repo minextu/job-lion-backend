@@ -1,0 +1,17 @@
+{
+    "name": "job-lion/job-lion",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Jan Houben",
+            "email": "jan@et.tc"
+        }
+    ],
+    "require": {
+        "silex/silex": "~2.0",
+        "hautelook/phpass": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/dbunit": "^3.0"
+    }
+}

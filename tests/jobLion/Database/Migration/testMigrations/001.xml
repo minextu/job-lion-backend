@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="simpleTable">
+        <column>id</column>
+    </table>
+</dataset>
