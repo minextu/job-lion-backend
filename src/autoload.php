@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/JobLion/Exceptions.php';
 
 /**
  * Autoloader for nextjob

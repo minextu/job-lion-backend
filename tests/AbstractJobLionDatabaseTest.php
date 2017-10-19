@@ -1,11 +1,14 @@
 <?php namespace JobLion\JobLion;
 
 use PHPUnit\Framework\TestCase;
-use \PDO;
+use PHPUnit\DbUnit\TestCaseTrait;
+use PDO;
 use JobLion\JobLion\Database\Migration\Migrator;
 
 abstract class AbstractJobLionDatabaseTest extends TestCase
 {
+    use TestCaseTrait;
+
     // only instantiate pdo once for test clean-up/fixture load
     private static $pdo = null;
 
