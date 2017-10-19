@@ -7,6 +7,11 @@
             "email": "jan@et.tc"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "7.0"
+        }
+    },
     "require": {
         "silex/silex": "~2.0",
         "hautelook/phpass": "^1.1"
