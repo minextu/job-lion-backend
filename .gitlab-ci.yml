@@ -1,0 +1,25 @@
+image:                 php:7.0
+
+# Composer stores all downloaded packages in the vendor/ directory.
+cache:
+  paths:
+  - vendor/
+
+before_script:
+- bash ci/dockerInstall.sh > /dev/null
+
+variables:
+  MYSQL_DATABASE:      ettc_tests
+  MYSQL_ROOT_PASSWORD: Kaigilohgeifeph5huqu
+
+stages:
+  - test
+
+# test on php 7.0 + mariadb 10.1 (debian stretch)
+test:php:7.0:
+  image:               php:7.0
+  services:
+    - mariadb:10.1
+  stage:               test
+  script:
+  - phpunit --coverage-text --colors=never
