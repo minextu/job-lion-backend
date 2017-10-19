@@ -1,6 +1,6 @@
-<?php namespace JobLion\JobLion\Database\Migration;
+<?php namespace JobLion\Database\Backend\Migration;
 
-use JobLion\JobLion\Database\DatabaseInterface;
+use JobLion\Database\Backend\BackendInterface;
 
 /**
  * An instance can upgrade a database using objects extending Migration\AbstractMigration
@@ -22,9 +22,9 @@ class Migrator
     private $target;
 
     /**
-    * Database to be migrated
+    * Database backend to be migrated
      *
-    * @var JobLion\JobLion\Database\DatabaseInterface
+    * @var BackendInterface
     */
     private $db;
 
@@ -33,9 +33,9 @@ class Migrator
     *
     * @param int               $currentVersion Current Database Migration Version
     * @param int|bool          $targetVersion  Target Database Migration Version (True for the newest version)
-    * @param DatabaseInterface $db             Database to be migrated
+    * @param BackendInterface $db              Database backend to be migrated
     */
-    public function __construct($currentVersion, $targetVersion, DatabaseInterface $db)
+    public function __construct($currentVersion, $targetVersion, BackendInterface $db)
     {
         $this->current = $currentVersion;
 
@@ -83,7 +83,7 @@ class Migrator
                 // include the migration class and create an instance
                 (include_once "$folder/$file") or die("Migration $file not found!");
                 $class = str_replace($version."_", "", str_replace(".php", "", $file));
-                $class = '\JobLion\JobLion\Database\Migration\\'.$class;
+                $class = '\JobLion\Database\Backend\Migration\\'.$class;
                 $migrationObject = new $class();
 
                 // use the int value as version from now on

@@ -1,11 +1,11 @@
-<?php namespace JobLion\JobLion\Database;
+<?php namespace JobLion\Database\Backend;
 
 use PDO;
 
 /**
  * A Mysql PDO Connection
  */
-class Mysql implements DatabaseInterface
+class Mysql implements BackendInterface
 {
     /**
      * charset to use

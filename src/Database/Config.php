@@ -1,4 +1,4 @@
-<?php namespace JobLion\JobLion;
+<?php namespace JobLion\Database;
 
 /**
 * An instance can load and save to a configuration file

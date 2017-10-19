@@ -1,4 +1,4 @@
-<?php namespace JobLion\JobLion\Exception;
+<?php namespace JobLion\Database\Exception;
 
 /**
 * generic Exceptions thrown in this namespace

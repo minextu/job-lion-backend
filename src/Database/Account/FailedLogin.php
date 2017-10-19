@@ -1,6 +1,6 @@
-<?php namespace JobLion\JobLion\Account;
+<?php namespace JobLion\Database\Account;
 
-use JobLion\JobLion\Database\DatabaseInterface;
+use JobLion\Database\Backend\BackendInterface;
 
 /**
  * Static class used log and get failed logins
@@ -10,10 +10,10 @@ class FailedLogin
     /**
      * Add a failed login attempt, will also log ip address
      *
-     * @param DatabaseInterface $db    Database to be sued
+     * @param BackendInterface $db     Database backend to be sued
      * @param string            $email E-Mail to log
      */
-    public static function add(DatabaseInterface $db, $email)
+    public static function add(BackendInterface $db, $email)
     {
         $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -29,11 +29,11 @@ class FailedLogin
     /**
      * Try to fetch the time of last login attempt
      *
-     * @param  DatabaseInterface $db    Database to be sued
+     * @param  BackendInterface $db     Database backend to be sued
      * @param  string            $email E-Mail that was logged
      * @return Mysql time of last login attempt, or False if non exist
      */
-    public static function getLastTime(DatabaseInterface $db, $email)
+    public static function getLastTime(BackendInterface $db, $email)
     {
         $sql = 'SELECT `time` FROM failedLogins WHERE email=? ORDER BY `time` DESC LIMIT 1';
 

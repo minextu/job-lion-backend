@@ -1,6 +1,6 @@
-<?php namespace JobLion\JobLion\Account;
+<?php namespace JobLion\Database\Account;
 
-use JobLion\JobLion\AbstractJobLionDatabaseTest;
+use JobLion\Database\AbstractJobLionDatabaseTest;
 
 class FailedLoginTest extends AbstractJobLionDatabaseTest
 {

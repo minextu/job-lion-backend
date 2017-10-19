@@ -1,9 +1,9 @@
-<?php namespace JobLion\JobLion;
+<?php namespace JobLion\Database;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PDO;
-use JobLion\JobLion\Database\Migration\Migrator;
+use JobLion\Database\Backend\Migration\Migrator;
 
 abstract class AbstractJobLionDatabaseTest extends TestCase
 {
@@ -51,7 +51,7 @@ abstract class AbstractJobLionDatabaseTest extends TestCase
 
     final public function getDb()
     {
-        return new Database\Fake($this->getConnection()->getConnection());
+        return new Backend\Fake($this->getConnection()->getConnection());
     }
 
     // migrate test database

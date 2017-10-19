@@ -1,6 +1,6 @@
-<?php namespace JobLion\JobLion\Account;
+<?php namespace JobLion\Database\Account;
 
-use JobLion\JobLion\AbstractJobLionDatabaseTest;
+use JobLion\Database\AbstractJobLionDatabaseTest;
 
 class UserTest extends AbstractJobLionDatabaseTest
 {
@@ -70,7 +70,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\InvalidId
+      * @expectedException JobLion\Database\Exception\InvalidId
       */
     public function testUserCanNotBeLoadedByInvalidId()
     {
@@ -81,7 +81,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testLoadedUserCanNotBeCreated()
     {
@@ -96,7 +96,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testEmptyUserCanNotBeCreated()
     {
@@ -106,7 +106,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testUserWithoutPasswordCanNotBeCreated()
     {
@@ -119,7 +119,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testUserWithoutRealNameCanNotBeCreated()
     {
@@ -136,7 +136,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     */
 
     /**
-      * @expectedException JobLion\JobLion\Exception\InvalidEmail
+      * @expectedException JobLion\Database\Exception\InvalidEmail
       */
     public function testAlreadyExistingEmail()
     {
@@ -147,7 +147,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\InvalidEmail
+      * @expectedException JobLion\Database\Exception\InvalidEmail
       */
     public function testEmptyEmail()
     {
@@ -156,7 +156,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\InvalidEmail
+      * @expectedException JobLion\Database\Exception\InvalidEmail
       */
     public function testInvalidEmail()
     {
@@ -208,7 +208,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\InvalidPassword
+      * @expectedException JobLion\Database\Exception\InvalidPassword
       */
     public function testInvalidShortPassword()
     {

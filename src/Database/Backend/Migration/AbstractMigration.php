@@ -1,6 +1,6 @@
-<?php namespace JobLion\JobLion\Database\Migration;
+<?php namespace JobLion\Database\Backend\Migration;
 
-use JobLion\JobLion\Database\DatabaseInterface;
+use JobLion\Database\Backend\BackendInterface;
 
 /**
  * An instance should be able to migrate the Database
@@ -8,18 +8,18 @@ use JobLion\JobLion\Database\DatabaseInterface;
 abstract class AbstractMigration
 {
     /**
-     * Database to be migrated
+     * Database backend to be migrated
      *
-     * @var DatabaseInterface
+     * @var BackendInterface
      */
     protected $db;
 
     /**
      * Sets the DB
      *
-     * @param DatabaseInterface $db Database to be migrated
+     * @param BackendInterface $db Database Backend to be migrated
      */
-    final public function setDb(DatabaseInterface $db)
+    final public function setDb(BackendInterface $db)
     {
         $this->db = $db;
     }

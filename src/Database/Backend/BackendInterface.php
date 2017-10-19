@@ -1,9 +1,9 @@
-<?php namespace JobLion\JobLion\Database;
+<?php namespace JobLion\Database\Backend;
 
 /**
  * Used to interface with a Database using PDO
  */
-interface DatabaseInterface
+interface BackendInterface
 {
     /**
      * Create a new instance and connect to the Database

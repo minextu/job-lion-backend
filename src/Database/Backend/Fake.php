@@ -1,12 +1,12 @@
-<?php namespace JobLion\JobLion\Database;
+<?php namespace JobLion\Database\Backend;
 
 use JobLion\JobLion\Exception;
 use PDO;
 
 /**
- * Dummy Database, used for Testing
+ * Dummy Database backend, used for Testing
  */
-class Fake implements DatabaseInterface
+class Fake implements BackendInterface
 {
     /**
      * PDO object

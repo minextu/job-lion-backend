@@ -1,8 +1,8 @@
-<?php namespace JobLion\JobLion\Account;
+<?php namespace JobLion\Database\Account;
 
 use Hautelook\Phpass\PasswordHash;
-use JobLion\JobLion\Exception;
-use JobLion\JobLion\Database\DatabaseInterface;
+use JobLion\Database\Exception;
+use JobLion\Database\Backend\BackendInterface;
 use PDO;
 
 /**
@@ -13,7 +13,7 @@ class User
     /**
      * Main database
      *
-     * @var DatabaseInterface
+     * @var BackendInterface
      */
     private $db;
 
@@ -55,10 +55,10 @@ class User
     /**
      * Creates a new Instance. Loads User Info when $id is specified
      *
-     * @param DatabaseInterface $db Database to be used
+     * @param BackendInterface $db Database backend to be used
      * @param int               $id User Id to be loaded
      */
-    public function __construct(DatabaseInterface $db, $id=false)
+    public function __construct(BackendInterface $db, $id=false)
     {
         $this->db = $db;
 

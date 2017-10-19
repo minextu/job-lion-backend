@@ -1,8 +1,8 @@
-<?php namespace JobLion\JobLion\Database\Migration;
+<?php namespace JobLion\Database\Backend\Migration;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
-use JobLion\JobLion\Database;
+use JobLion\Database\Backend;
 
 class MigratorTest extends TestCase
 {
@@ -34,7 +34,7 @@ class MigratorTest extends TestCase
 
     public function getDb()
     {
-        return new Database\Fake($this->getConnection()->getConnection());
+        return new Backend\Fake($this->getConnection()->getConnection());
     }
 
     public function testDatabaseCanBeUpgradedUsingAnObject()

@@ -1,4 +1,4 @@
-<?php namespace JobLion\JobLion\Database\Migration;
+<?php namespace JobLion\Database\Backend\Migration;
 
 class addUsersTable extends AbstractMigration
 {

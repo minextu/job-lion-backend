@@ -1,4 +1,4 @@
-<?php namespace JobLion\JobLion;
+<?php namespace JobLion\Database;
 
 use PHPUnit\Framework\TestCase;
 
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testOptionsCanNotBeReadWhenNotLoaded()
     {
@@ -78,7 +78,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testOptionCanNotBeAddedWhenNotLoaded()
     {
@@ -87,7 +87,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-      * @expectedException JobLion\JobLion\Exception\Exception
+      * @expectedException JobLion\Database\Exception\Exception
       */
     public function testConfigCanNotBeOverwritten()
     {
