@@ -14,6 +14,7 @@ variables:
 
 stages:
   - test
+  - deploy
 
 # test on php 7.0 + mariadb 10.1 (debian stretch)
 test:php:7.0:
@@ -23,3 +24,22 @@ test:php:7.0:
   stage:               test
   script:
   - phpunit --coverage-text --colors=never
+
+# test on php 7.1 + mariadb 10.1
+test:php:7.1:
+  image:               php:7.1
+  services:
+    - mariadb:10.1
+  stage:               test
+  script:
+  - phpunit --coverage-text --colors=never
+
+deploy_staging:
+  stage:               deploy
+  script:
+    - bash ci/deploy.sh staging
+  environment:
+    name:              staging
+    url:               https://job-lion-backend.et.tc
+  only:
+  - master@Jan/job-lion-backend
