@@ -37,6 +37,9 @@ class UserTest extends AbstractJobLionApiTest
             "error: $error, message: $errorMessage"
         );
 
+        // check success answer
+        $this->assertTrue($answer['success']);
+
         // check if user is in database
         $user = new User($this->getDb());
         $loadStatus = $user->loadEmail($email);
