@@ -12,6 +12,10 @@ class InvalidId extends Exception
 {
 }
 
+class EmailExists extends Exception
+{
+}
+
 class InvalidEmail extends Exception
 {
 }

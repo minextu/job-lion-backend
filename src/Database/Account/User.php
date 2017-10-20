@@ -171,6 +171,8 @@ class User
      * Set User E-Mail
      *
      * @param string $email New User E-Mail
+     *
+     * @return User
      */
     public function setEmail($email)
     {
@@ -178,7 +180,7 @@ class User
         $exists = $testUser->loadEmail($email);
 
         if ($exists !== false) {
-            throw new Exception\InvalidEmail("Email does already exist.");
+            throw new Exception\EmailExists("Email does already exist.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new Exception\InvalidEmail("Invalid email format.");
@@ -192,6 +194,8 @@ class User
      * Set Users first name
      *
      * @param string $firstName new first name
+     *
+     * @return User
      */
     public function setFirstName($firstName)
     {
@@ -216,6 +220,8 @@ class User
      * Throws InvalidPasswordException on invalid Passwords
      *
      * @param string $password New User Password
+     *
+     * @return User
      */
     public function setPassword($password)
     {
@@ -265,7 +271,7 @@ class User
     /**
      * Save User in Database
      *
-     * @return bool   True on success, False otherwise
+     * @return User
      */
     public function create()
     {
@@ -300,10 +306,9 @@ class User
 
         if ($status) {
             $this->id = $status;
-            $status = true;
+        } else {
+            throw new Exception\Exception("User could not be saved to Database");
         }
-
-        return $status;
     }
 
     /**

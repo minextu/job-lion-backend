@@ -1,0 +1,7 @@
+AddDefaultCharset utf-8
+
+RewriteEngine on
+
+# rewrite api request to correct php file
+RewriteCond %{REQUEST_URI} !apidoc(/|$)
+RewriteRule ^ index.php [L,QSA]

@@ -4,29 +4,10 @@ use JobLion\Database\AbstractJobLionDatabaseTest;
 
 class UserTest extends AbstractJobLionDatabaseTest
 {
-    private function createTestUser()
-    {
-        $user = new User($this->getDb());
-
-        // save user
-        $email = "test@example.com";
-        $firstName = "Test";
-        $lastName = "Testus";
-        $password = "abc123";
-
-        $user->setEmail($email)
-             ->setFirstName($firstName)
-             ->setLastName($lastName)
-             ->setPassword($password);
-
-        $createStatus = $user->create();
-        $this->assertTrue($createStatus, "create didn't return True");
-    }
-
     public function testUserCanBeCreated()
     {
         // create test user
-        $this->createTestUser();
+        $this->createTestUser("test@example.com");
 
         // check if user would be in Database
         $this->assertEquals(1, $this->getConnection()->getRowCount('users'), "Inserting failed");
@@ -136,7 +117,7 @@ class UserTest extends AbstractJobLionDatabaseTest
     */
 
     /**
-      * @expectedException JobLion\Database\Exception\InvalidEmail
+      * @expectedException JobLion\Database\Exception\EmailExists
       */
     public function testAlreadyExistingEmail()
     {

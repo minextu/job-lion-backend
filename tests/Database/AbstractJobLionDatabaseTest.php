@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PDO;
 use JobLion\Database\Backend\Migration\Migrator;
+use JobLion\Database\Account\User;
 
 abstract class AbstractJobLionDatabaseTest extends TestCase
 {
@@ -81,6 +82,23 @@ abstract class AbstractJobLionDatabaseTest extends TestCase
             $sql = "DROP TABLE `$table`";
             $this->getDb()->getPdo()->prepare($sql)->execute();
         }
+    }
+
+    // create test users
+    protected function createTestUser($email="test@example.com")
+    {
+        $user = new User($this->getDb());
+
+        // save user
+        $firstName = "Test";
+        $lastName = "Testus";
+        $password = "abc123";
+
+        $user->setEmail($email)
+             ->setFirstName($firstName)
+             ->setLastName($lastName)
+             ->setPassword($password)
+             ->create();
     }
 
     public function init()
