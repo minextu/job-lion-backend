@@ -24,18 +24,15 @@ class ConfigTest extends TestCase
         $configTestOption2 = 'Test String';
 
         $config = new Config('conf/config.phpUnitTest.php');
-        $config->create();
-        $config->set('testOption', $configTestOption);
-        $success = $config->set('testOption2', $configTestOption2);
+        $config->create()
+               ->set('testOption', $configTestOption)
+               ->set('testOption2', $configTestOption2);
 
-        $this->assertTrue($success);
         $this->assertFileExists('conf/config.phpUnitTest.php');
 
         // Check if the config file can be loaded again
         $config = new Config('conf/config.phpUnitTest.php');
-        $success = $config->load();
-
-        $this->assertTrue($success);
+        $config->load();
 
         $testOption = $config->get('testOption');
         $testOption2 = $config->get('testOption2');
@@ -49,10 +46,8 @@ class ConfigTest extends TestCase
         $configTestOption3 = false;
 
         $config = new Config('conf/config.phpUnitTest.php');
-        $success = $config->load();
-        $this->assertTrue($success);
-
-        $config->set('testOption3', $configTestOption3);
+        $config->load()
+               ->set('testOption3', $configTestOption3);
 
         $config = new Config('conf/config.phpUnitTest.php');
         $config->load();
@@ -60,12 +55,13 @@ class ConfigTest extends TestCase
         $this->assertEquals($testOption3, $configTestOption3);
     }
 
+    /**
+      * @expectedException JobLion\Database\Exception\Exception
+      */
     public function testLoadNonExistingConfig()
     {
         $config = new Config('conf/doesNotExist.php');
         $success = $config->load();
-
-        $this->assertFalse($success);
     }
 
     /**

@@ -39,7 +39,7 @@ class Config
     /**
     * Creates a new Config File
     *
-    * @return bool  True if File could be created, False otherwise
+    * @return Config
     */
     public function create()
     {
@@ -50,21 +50,21 @@ class Config
             throw new Exception\Exception('This Config File does already exists.');
         }
 
-
-        return $this->save();
+        $this->save();
+        return $this;
     }
 
     /**
     * Loads the File $this->configFile and parses all Parameters into $this->configArray
     *
-    * @return bool  True if File could be loaded, False if the File does not exist
+    * @return Config
     */
     public function load()
     {
         $file = $this->rootDir.$this->configFile;
 
         if (!is_file($file)) {
-            return false;
+            throw new Exception\Exception("Config file '$file' not found!");
         }
 
         global $CONFIG;
@@ -76,7 +76,7 @@ class Config
 
         $this->configArray = $CONFIG;
 
-        return true;
+        return $this;
     }
 
     /**
@@ -84,7 +84,7 @@ class Config
     *
     * @param  string $parameter Name of the Parameter
     * @param  string $value     Value of the Parameter
-    * @return bool              True if File could be saved, False otherwise
+    * @return Config
     */
     public function set($parameter, $value)
     {
@@ -93,7 +93,9 @@ class Config
         }
 
         $this->configArray[$parameter] = $value;
-        return $this->save();
+
+        $this->save();
+        return $this;
     }
 
     /**
@@ -114,7 +116,7 @@ class Config
     /**
     * Saves all Parameters with values to $this->configFile
     *
-    * @return bool  True if all Parameters could be saved to the Config File, False otherwise
+    * @return Config
     */
     private function save()
     {
@@ -123,10 +125,10 @@ class Config
         $status = file_put_contents($file, $content);
 
         if ($status === false) {
-            return false;
-        } else {
-            return true;
+            throw new Exception\Exception("Config file could not be saved");
         }
+
+        return $this;
     }
 
     /**
