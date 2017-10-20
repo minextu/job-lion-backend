@@ -27,6 +27,7 @@ class User extends AbstractApi
      * @apiError        MissingValues         Some values weren't transmited
      * @apiError        InvalidEmail          E-Mail is invalid
      * @apiError        EmailExists           E-Mail is already in use
+     * @apiError        InvalidPassword       Password is invalid
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -72,6 +73,11 @@ class User extends AbstractApi
         } catch (Database\Exception\InvalidEmail $e) {
             return $this->app->json(
               ["error" => "InvalidEmail", "message" => $e->getMessage()],
+              400
+            );
+        } catch (Database\Exception\InvalidPassword $e) {
+            return $this->app->json(
+              ["error" => "InvalidPassword", "message" => $e->getMessage()],
               400
             );
         } catch (\Exception $e) {

@@ -71,7 +71,7 @@ class UserTest extends AbstractJobLionApiTest
         // check error text
         $answer = $client->getResponse()->getContent();
         $answer = json_decode($answer, true);
-        $this->assertEquals("MissingValues", $answer['error'], "error missing");
+        $this->assertEquals("MissingValues", $answer['error'], "got wrong error");
     }
 
     public function testExistingEmailThrowsError()
@@ -104,7 +104,7 @@ class UserTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("EmailExists", $error, "error missing");
+        $this->assertEquals("EmailExists", $error, "got wrong error");
     }
 
     public function testInvalidEmailThrowsError()
@@ -135,6 +135,37 @@ class UserTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("InvalidEmail", $answer['error'], "error missing");
+        $this->assertEquals("InvalidEmail", $answer['error'], "got wrong error");
+    }
+
+    public function testShortPasswordThrowsError()
+    {
+        // send request with a too short password
+        $client = $this->createClient();
+        $crawler = $client->request(
+            'POST',
+            '/api/v1/user/create',
+            array(
+            "email" => "test@example.com",
+            "firstName" => "Test",
+            "lastName" => "Testus",
+            "password" => "abc12")
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // Return code should be an error
+        $this->assertEquals(
+            400,
+            $client->getResponse()->getStatusCode(),
+            "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("InvalidPassword", $answer['error'], "got wrong error");
     }
 }

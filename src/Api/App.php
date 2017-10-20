@@ -6,7 +6,7 @@ use JobLion\Database\Backend\BackendInterface;
 use JobLion\Database\Config;
 
 /**
- * Can init all api routes
+ * Initializes all api routes
  */
 class App
 {
