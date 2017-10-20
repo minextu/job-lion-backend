@@ -4,6 +4,9 @@ use JobLion\Database;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * User api controller
+ */
 class User extends AbstractApi
 {
     /**

@@ -31,7 +31,7 @@ class FailedLogin
      *
      * @param  BackendInterface $db     Database backend to be sued
      * @param  string            $email E-Mail that was logged
-     * @return Mysql time of last login attempt, or False if non exist
+     * @return timestamp                time of last login attempt, or False if non exist
      */
     public static function getLastTime(BackendInterface $db, $email)
     {
