@@ -104,21 +104,33 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         }
     }
 
-    // create test users
-    protected function createTestUser($email="test@example.com")
+    protected function createTestUser($email="test@example.com", $password="abc123")
     {
         $user = new User($this->getDb());
 
-        // save user
+        // additional information
         $firstName = "Test";
         $lastName = "Testus";
-        $password = "abc123";
 
+        // save user
         $user->setEmail($email)
              ->setFirstName($firstName)
              ->setLastName($lastName)
              ->setPassword($password)
              ->create();
+    }
+
+    protected function loginTestUser($email="test@example.com", $password="abc123")
+    {
+        // login user
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'POST',
+             '/api/v1/user/login',
+             array(
+               "email" => $email,
+               "password" => $password)
+          );
     }
 
 

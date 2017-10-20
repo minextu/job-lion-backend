@@ -85,15 +85,15 @@ abstract class AbstractJobLionDatabaseTest extends TestCase
     }
 
     // create test users
-    protected function createTestUser($email="test@example.com")
+    protected function createTestUser($email="test@example.com", $password="abc123")
     {
         $user = new User($this->getDb());
 
-        // save user
+        // additional information
         $firstName = "Test";
         $lastName = "Testus";
-        $password = "abc123";
 
+        // save user
         $user->setEmail($email)
              ->setFirstName($firstName)
              ->setLastName($lastName)

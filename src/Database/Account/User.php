@@ -327,4 +327,24 @@ class User
             throw new Exception\Exception("Invalid Hash");
         }
     }
+
+    /**
+     * Convert object to info array
+     * @return array info array
+     */
+    public function toArray()
+    {
+        if (!isset($this->id)) {
+            throw new Exception\Exception("User has to be loaded first.");
+        }
+
+        $arr = [
+          "id" => $this->getId(),
+          "email" => $this->getEmail(),
+          "firstName" => $this->getFirstName(),
+          "lastName" => $this->getLastName()
+        ];
+
+        return $arr;
+    }
 }
