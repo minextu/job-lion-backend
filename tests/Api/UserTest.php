@@ -1,7 +1,7 @@
 <?php namespace JobLion\Api;
 
 use JobLion\Api\AbstractJobLionApiTest;
-use JobLion\Database\Account\User;
+use JobLion\Database\Account\Password;
 
 class UserTest extends AbstractJobLionApiTest
 {
@@ -45,15 +45,16 @@ class UserTest extends AbstractJobLionApiTest
         $this->assertTrue($answer['success']);
 
         // check if user is in database
-        $user = new User($this->getDb());
-        $loadStatus = $user->loadEmail($email);
-        $this->assertTrue($loadStatus, "User is not in Database");
+        $user = $this->getEntityManager()
+                        ->getRepository('JobLion\Database\Entity\User')
+                        ->findOneBy(array('email' => $email));
+        $this->assertTrue($user == true, "User is not in Database");
 
         // check if values were saved correctly
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($firstName, $user->getFirstName());
         $this->assertEquals($lastName, $user->getLastName());
-        $this->assertTrue($user->checkPassword($password));
+        $this->assertTrue(Password::check($user, $password));
     }
 
     public function testCreateWithMissingValuesThrowsError()

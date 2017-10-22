@@ -1,9 +1,9 @@
 vendor/*
-docs/
+public/docs/
 composer.phar
 .directory
 .php_cs.cache
 conf/config.php
 conf/config.phpUnitTest.php
-apidoc/
+public/apidoc/
 apidoc.json

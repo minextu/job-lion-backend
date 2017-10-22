@@ -3,7 +3,7 @@
 /**
 * An instance can load and save to a configuration file
 */
-class Config
+class ConfigFile
 {
     /**
     * The Path to the Root of this Project

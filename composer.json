@@ -13,6 +13,7 @@
         }
     },
     "require": {
+        "doctrine/orm": "2.4.*",
         "silex/silex": "~2.0",
         "hautelook/phpass": "^1.1"
     },

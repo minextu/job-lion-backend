@@ -1,6 +1,7 @@
 <?php namespace JobLion\Api\Controller;
 
-use JobLion\Database;
+use JobLion\Database\Entity;
+use JobLion\Database\Account\Password;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -52,38 +53,48 @@ class User extends AbstractController
             );
         }
 
-        // create user
-        $user = new Database\Account\User($this->db);
-        try {
-            $user->setEmail($email);
-            $user->setFirstName($firstName);
-            $user->setLastName($lastName);
-            $user->setPassword($password);
-            $user->create();
-
-            // return success
+        // check if email already exists
+        $testUser = $this->entityManager
+                            ->getRepository(Entity\User::class)
+                            ->findOneBy(array('email' => $email));
+        if ($testUser) {
             return $this->app->json(
-              ["success" => true],
-              200
-            );
-        }
-        // catch errors
-        catch (Database\Exception\EmailExists $e) {
-            return $this->app->json(
-              ["error" => "EmailExists", "message" => $e->getMessage()],
+              ["error" => "EmailExists"],
               409
             );
-        } catch (Database\Exception\InvalidEmail $e) {
+        }
+
+        // check if email is valid
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->app->json(
-              ["error" => "InvalidEmail", "message" => $e->getMessage()],
-              400
-            );
-        } catch (Database\Exception\InvalidPassword $e) {
-            return $this->app->json(
-              ["error" => "InvalidPassword", "message" => $e->getMessage()],
+              ["error" => "InvalidEmail"],
               400
             );
         }
+
+        // check if password is secure
+        if (strlen($password) < 6) {
+            return $this->app->json(
+              ["error" => "InvalidPassword"],
+              400
+            );
+        }
+
+        // create user
+        $user = new Entity\User();
+        $user->setEmail($email);
+        $user->setFirstName($firstName);
+        $user->setLastName($lastName);
+        $user->setHash(Password::hash($password));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        // return success
+        return $this->app->json(
+          ["success" => true],
+          200
+        );
     }
 
     /**
@@ -133,8 +144,11 @@ class User extends AbstractController
         }
 
         // check if email and password are correct
-        $user = new Database\Account\User($this->db);
-        if (!$user->loadEmail($email) || !$user->checkPassword($password)) {
+        $user = $this->entityManager
+                        ->getRepository(Entity\User::class)
+                        ->findOneBy(array('email' => $email));
+
+        if (!$user || !Password::check($user, $password)) {
             return $this->app->json(
               ["error" => "InvalidLogin"],
               401

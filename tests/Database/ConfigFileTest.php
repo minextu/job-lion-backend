@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends TestCase
+class ConfigFileTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
         $configTestOption = true;
         $configTestOption2 = 'Test String';
 
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->create()
                ->set('testOption', $configTestOption)
                ->set('testOption2', $configTestOption2);
@@ -31,7 +31,7 @@ class ConfigTest extends TestCase
         $this->assertFileExists('conf/config.phpUnitTest.php');
 
         // Check if the config file can be loaded again
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->load();
 
         $testOption = $config->get('testOption');
@@ -45,11 +45,11 @@ class ConfigTest extends TestCase
     {
         $configTestOption3 = false;
 
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->load()
                ->set('testOption3', $configTestOption3);
 
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->load();
         $testOption3 = $config->get('testOption3');
         $this->assertEquals($testOption3, $configTestOption3);
@@ -60,7 +60,7 @@ class ConfigTest extends TestCase
       */
     public function testLoadNonExistingConfig()
     {
-        $config = new Config('conf/doesNotExist.php');
+        $config = new ConfigFile('conf/doesNotExist.php');
         $success = $config->load();
     }
 
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
       */
     public function testOptionsCanNotBeReadWhenNotLoaded()
     {
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->get('testOption');
     }
 
@@ -78,7 +78,7 @@ class ConfigTest extends TestCase
       */
     public function testOptionCanNotBeAddedWhenNotLoaded()
     {
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->set('testOption', true);
     }
 
@@ -87,7 +87,7 @@ class ConfigTest extends TestCase
       */
     public function testConfigCanNotBeOverwritten()
     {
-        $config = new Config('conf/config.phpUnitTest.php');
+        $config = new ConfigFile('conf/config.phpUnitTest.php');
         $config->create();
     }
 }
