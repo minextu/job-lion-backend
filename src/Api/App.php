@@ -30,10 +30,10 @@ class App
             return new Controller\User($entityManager, $app);
         };
 
-        $app->post('/api/v1/user/create', "user.controller:create");
-        $app->post('/api/v1/user/login', "user.controller:login");
-        $app->post('/api/v1/user/logout', "user.controller:logout");
-        $app->get('/api/v1/user/info', "user.controller:info");
+        $app->post('/v1/user/create', "user.controller:create");
+        $app->post('/v1/user/login', "user.controller:login");
+        $app->post('/v1/user/logout', "user.controller:logout");
+        $app->get('/v1/user/info', "user.controller:info");
 
         return $app;
     }

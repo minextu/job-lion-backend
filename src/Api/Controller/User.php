@@ -16,7 +16,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      *
-     * @api        {post} /user/create create
+     * @api        {post} /v1/user/create create
      * @apiName    createUser
      * @apiVersion 0.1.0
      * @apiGroup   User
@@ -103,7 +103,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      *
-     * @api        {post} /user/login login
+     * @api        {post} /v1/user/login login
      * @apiName    loginUser
      * @apiVersion 0.1.0
      * @apiGroup   User
@@ -170,7 +170,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      *
-     * @api        {post} /user/logout logout
+     * @api        {post} /v1/user/logout logout
      * @apiName    logoutUser
      * @apiVersion 0.1.0
      * @apiGroup   User
@@ -204,7 +204,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      *
-     * @api        {get} /user/info login info
+     * @api        {get} /v1/user/info login info
      * @apiName    infoUser
      * @apiVersion 0.1.0
      * @apiGroup   User

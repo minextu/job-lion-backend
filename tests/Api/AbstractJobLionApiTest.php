@@ -132,7 +132,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request(
              'POST',
-             '/api/v1/user/login',
+             '/v1/user/login',
              array(
                "email" => $email,
                "password" => $password)

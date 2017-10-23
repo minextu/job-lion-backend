@@ -1,0 +1,8 @@
+{
+    "name": "job-lion",
+    "version": "0.1.0",
+    "description": "job-lion API",
+    "title": "job-lion API",
+    "url": "http://job-lion.example.com/api",
+    "sampleUrl": "http://job-lion.example.com/api"
+}

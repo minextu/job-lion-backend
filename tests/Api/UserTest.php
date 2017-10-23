@@ -20,7 +20,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/api/v1/user/create',
+            '/v1/user/create',
             array(
               "email" => $email,
               "firstName" => $firstName,
@@ -63,7 +63,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/api/v1/user/create',
+            '/v1/user/create',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -87,7 +87,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/api/v1/user/create',
+            '/v1/user/create',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -118,7 +118,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/api/v1/user/create',
+            '/v1/user/create',
             array(
             "email" => "example.com",
             "firstName" => "Test",
@@ -149,7 +149,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/api/v1/user/create',
+            '/v1/user/create',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -190,7 +190,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => $email,
             "password" => $password)
@@ -225,7 +225,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => $email,
             "password" => "wrongPassword")
@@ -260,7 +260,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => "wrongEmail@example.com",
             "password" => $password)
@@ -295,7 +295,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => $email)
       );
@@ -329,7 +329,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => $email,
             "password" => $password)
@@ -339,7 +339,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/login',
+          '/v1/user/login',
           array(
             "email" => $email,
             "password" => $password)
@@ -379,7 +379,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
            'POST',
-           '/api/v1/user/logout'
+           '/v1/user/logout'
         );
 
         // decode answer
@@ -408,7 +408,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/api/v1/user/logout'
+          '/v1/user/logout'
         );
 
         // decode answer
@@ -444,7 +444,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
            'GET',
-           '/api/v1/user/info'
+           '/v1/user/info'
         );
 
         // decode answer
@@ -481,7 +481,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'GET',
-          '/api/v1/user/info'
+          '/v1/user/info'
         );
 
         // decode answer
