@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ $1 == "staging" ]; then
-    server="deploy@staging.et.tc"
-    folder="/var/www/et.tc/job-lion-backend"
+    server="deploy@job-lion.et.tc"
+    folder="/var/www/et.tc/job-lion/staging/backend"
 #elif [ $1 == "production" ]; then
 #    server="deploy@et.tc"
 #    folder="/var/www/et.tc/Root"
@@ -34,9 +34,9 @@ git checkout $commit
 composer install
 
 # migrate database
-php jlc.php upgrade
+vendor/bin/doctrine orm:schema-tool:update --dump-sql
 
 # generate documentation
-apidoc -i src/ -o apidoc/
+apidoc -i src/ -o public/apidoc/
 
 EOSSH
