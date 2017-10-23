@@ -10,7 +10,6 @@ apt-get install git wget zlib1g-dev -yqq
 
 # Install php extensions
 docker-php-ext-install pdo_mysql
-docker-php-ext-install zip
 pecl install xdebug && docker-php-ext-enable xdebug
 
 # set timezone
