@@ -27,20 +27,6 @@ $CONFIG = array(
 'dbDatabase' => '',
 
 /**
-*  The current state of the Database.
-*  This variable will be updated after every migration and should not be changed manually
-*  Every migration script greater than databse_version will be started, till database_target_version is reached.
-*/
-'dbVersion' => 0,
-
-/**
-* The targeted Migration Status.
-* Every migration script greater than databse_version will be started, till database_target_version is reached.
-* If set to true, the newest Migration will be used
-*/
-'dbTargetVersion' => true,
-
-/**
 * The host of the Test Database
 */
 'testDbHost' => '',
