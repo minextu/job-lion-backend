@@ -7,19 +7,3 @@
 class Exception extends \Exception
 {
 }
-
-class InvalidId extends Exception
-{
-}
-
-class EmailExists extends Exception
-{
-}
-
-class InvalidEmail extends Exception
-{
-}
-
-class InvalidPassword extends Exception
-{
-}
