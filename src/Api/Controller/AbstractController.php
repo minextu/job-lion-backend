@@ -1,7 +1,7 @@
 <?php namespace JobLion\Api\Controller;
 
-use JobLion\Database\Backend\BackendInterface;
-use JobLion\Database\Account\User;
+use Doctrine\ORM\EntityManager;
+use JobLion\Database\Entity\User;
 use Silex\Application as Silex;
 
 /**
@@ -10,19 +10,23 @@ use Silex\Application as Silex;
 abstract class AbstractController
 {
     /**
-     * Database backend to be used
-     * @var BackendInterface
+     * Database entities to be used
+     * @var EntityManager
      */
-    protected $db;
+    protected $entityManager;
     /**
      * Silex Application
      * @var Silex
      */
     protected $app;
 
-    public function __construct(BackendInterface $db, Silex $app)
+    /**
+     * @param EntityManager $entityManager Doctrine EntityManager
+     * @param Silex         $app           Silex Application
+     */
+    public function __construct(EntityManager $entityManager, Silex $app)
     {
-        $this->db = $db;
+        $this->entityManager = $entityManager;
         $this->app = $app;
     }
 
@@ -39,7 +43,7 @@ abstract class AbstractController
             return false;
         }
 
-        $user = new User($this->db, $id);
+        $user = $this->entityManager->find(User::class, $id);
         return $user;
     }
 

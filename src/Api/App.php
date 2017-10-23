@@ -4,7 +4,8 @@ use Silex\Application as Silex;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use JobLion\Database\Backend\BackendInterface;
-use JobLion\Database\Config;
+use JobLion\Database\ConfigFile;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Initializes all api routes
@@ -13,11 +14,11 @@ class App
 {
     /**
      * Init all api routes and return the silex Application
-     * @param  BackendInterface $db     Database backend to be used
-     * @param  Config           $config Config object
-     * @return Silex                    Silex Application
+     * @param  EntityManager $entityManager  Database entites to be used
+     * @param  ConfigFile    $configFile     Config file to be used
+     * @return Silex                         Silex Application
      */
-    public static function init(BackendInterface $db, Config $config)
+    public static function init(EntityManager $entityManager, ConfigFile $config)
     {
         $app = new Silex();
         $app->register(new ServiceControllerServiceProvider());
@@ -25,8 +26,8 @@ class App
         $app['debug'] = $config->get('isDebug');
 
         // User routes
-        $app['user.controller'] = function () use ($db, $app) {
-            return new Controller\User($db, $app);
+        $app['user.controller'] = function () use ($entityManager, $app) {
+            return new Controller\User($entityManager, $app);
         };
 
         $app->post('/api/v1/user/create', "user.controller:create");
