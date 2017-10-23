@@ -40,6 +40,6 @@ deploy_staging:
     - bash ci/deploy.sh staging
   environment:
     name:              staging
-    url:               https://job-lion-backend.et.tc
+    url:               https://staging.job-lion.et.tc/api/apidoc
   only:
-  - master@Jan/job-lion-backend
+  - master@job-lion/job-lion-backend
