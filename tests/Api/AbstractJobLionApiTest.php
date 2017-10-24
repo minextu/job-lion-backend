@@ -13,11 +13,11 @@ abstract class AbstractJobLionApiTest extends WebTestCase
 {
     use TestCaseTrait;
 
-    // only instantiate db for test clean-up/fixture load
-    private static $pdo = null;
-    private static $conn = null;
-    private static $entityManager = null;
+    private $pdo = null;
+    private $conn = null;
+    private $entityManager = null;
     private static $configFile = null;
+    private static $inMemory = null;
 
     /**
      * create silex app
@@ -37,16 +37,22 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      */
     final private function getConnection()
     {
-        if (self::$conn === null) {
+        if (self::$configFile === null) {
             self::$configFile = new ConfigFile();
             self::$configFile->load();
-
-            self::$entityManager = EntityManager::create(self::$configFile, true);
-            self::$pdo = self::$entityManager->getConnection()->getWrappedConnection();
-            self::$conn = $this->createDefaultDBConnection(self::$pdo, ':mysql:');
+            self::$inMemory = self::$configFile->get("testDbHost") == ":memory:";
         }
 
-        return self::$conn;
+        $this->entityManager = EntityManager::create(self::$configFile, true);
+        $this->pdo = $this->entityManager->getConnection()->getWrappedConnection();
+
+        if (self::$inMemory) {
+            $this->conn = $this->createDefaultDBConnection($this->pdo, ':memory:');
+        } else {
+            $this->conn = $this->createDefaultDBConnection($this->pdo, ':mysql:');
+        }
+
+        return $this->conn;
     }
 
     /**
@@ -63,11 +69,11 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      */
     final protected function getEntityManager()
     {
-        if (self::$entityManager === null) {
+        if ($this->entityManager === null) {
             $this->getConnection();
         }
 
-        return self::$entityManager;
+        return $this->entityManager;
     }
 
     /**
@@ -77,8 +83,10 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     {
         parent::setup();
 
-        // delete possible existing tables
-        $this->dropTables();
+        // delete possible existing tables if using mysql
+        if (!self::$inMemory) {
+            $this->dropTables();
+        }
 
         // init database schema
         $schemaTool = new SchemaTool($this->getEntityManager());
@@ -91,10 +99,10 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     private function dropTables()
     {
         $sql = "SHOW TABLES";
-        $tables = self::$pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        $tables = $this->pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
         foreach ($tables as $table) {
             $sql = "DROP TABLE `$table`";
-            self::$pdo->prepare($sql)->execute();
+            $this->pdo->prepare($sql)->execute();
         }
     }
 
@@ -102,8 +110,10 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      * Create a test user
      * @param  string $email
      * @param  string $password
+     *
+     * @return Entity\User   The newly created user
      */
-    protected function createTestUser($email="test@example.com", $password="abc123")
+    protected function createTestUser($email="test@example.com", $password="abc123") : Entity\User
     {
         $user = new Entity\User();
 
@@ -119,6 +129,8 @@ abstract class AbstractJobLionApiTest extends WebTestCase
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+
+        return $user;
     }
 
     /**

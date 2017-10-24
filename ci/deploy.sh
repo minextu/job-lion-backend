@@ -34,7 +34,7 @@ git checkout $commit
 composer install
 
 # migrate database
-vendor/bin/doctrine orm:schema-tool:update --dump-sql
+vendor/bin/doctrine orm:schema-tool:update --dump-sql --force
 
 # generate documentation
 apidoc -i src/ -o public/apidoc/

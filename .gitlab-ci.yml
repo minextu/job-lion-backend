@@ -5,9 +5,6 @@ cache:
   paths:
   - vendor/
 
-before_script:
-- bash ci/dockerInstall.sh > /dev/null
-
 variables:
   MYSQL_DATABASE:      ettc_tests
   MYSQL_ROOT_PASSWORD: Kaigilohgeifeph5huqu
@@ -16,22 +13,30 @@ stages:
   - test
   - deploy
 
-# test on php 7.0 + mariadb 10.1 (debian stretch)
-test:php:7.0:
+# slow mysql test on php 7.0 + mariadb 10.1 (debian stretch)
+test:php:7.0:mysql:
   image:               php:7.0
   services:
     - mariadb:10.1
   stage:               test
   script:
+  - bash ci/dockerInstall.sh "mysql" > /dev/null
   - phpunit --coverage-text --colors=never
 
-# test on php 7.1 + mariadb 10.1
-test:php:7.1:
-  image:               php:7.1
-  services:
-    - mariadb:10.1
+# fast test on php 7.0
+test:php:7.0:
+  image:               php:7.0
   stage:               test
   script:
+  - bash ci/dockerInstall.sh > /dev/null
+  - phpunit --coverage-text --colors=never
+
+# fast test on php 7.1
+test:php:7.1:
+  image:               php:7.1
+  stage:               test
+  script:
+  - bash ci/dockerInstall.sh  > /dev/null
   - phpunit --coverage-text --colors=never
 
 deploy_staging:

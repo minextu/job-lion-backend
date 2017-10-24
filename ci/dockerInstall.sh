@@ -9,7 +9,9 @@ apt-get update -yqq
 apt-get install git wget zlib1g-dev -yqq
 
 # Install php extensions
-docker-php-ext-install pdo_mysql
+if [ $1 == "mysql" ]; then
+  docker-php-ext-install pdo_mysql
+fi
 pecl install xdebug && docker-php-ext-enable xdebug
 
 # set timezone
@@ -29,10 +31,13 @@ php -r "unlink('composer-setup.php'); unlink('installer.sig');"
 
 # setup config file
 cp conf/config.sample.php conf/config.php
-sed "s/'testDbHost' => ''/'testDbHost' => 'mariadb'/" -i conf/config.php
-sed "s/'testDbUser' => ''/'testDbUser' => 'root'/" -i conf/config.php
-sed "s/'testDbPassword' => ''/'testDbPassword' => 'Kaigilohgeifeph5huqu'/" -i conf/config.php
-sed "s/'testDbDatabase' => ''/'testDbDatabase' => 'ettc_tests'/" -i conf/config.php
+
+if [ $1 == "mysql" ]; then
+  sed "s/'testDbHost' => ':memory:'/'testDbHost' => 'mariadb'/" -i conf/config.php
+  sed "s/'testDbUser' => ''/'testDbUser' => 'root'/" -i conf/config.php
+  sed "s/'testDbPassword' => ''/'testDbPassword' => 'Kaigilohgeifeph5huqu'/" -i conf/config.php
+  sed "s/'testDbDatabase' => ''/'testDbDatabase' => 'ettc_tests'/" -i conf/config.php
+fi
 
 # install composer dependencies
 php composer.phar install

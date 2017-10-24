@@ -33,6 +33,12 @@ class EntityManager
           'driver' => 'pdo_mysql',
         );
 
+        if ($isTest && $configFile->get($prefix . "Host") == ":memory:") {
+            $connectionParams = array(
+              'url' => 'sqlite:///:memory:',
+            );
+        }
+
         return ORM\EntityManager::create($connectionParams, $entityConfig);
     }
 }
