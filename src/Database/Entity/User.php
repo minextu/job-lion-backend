@@ -51,6 +51,13 @@ class User
      */
     private $created;
 
+    /**
+    * @var JobCategory[] An ArrayCollection of JobCategory objects.
+    *
+    * @OneToMany(targetEntity="JobCategory", mappedBy="user")
+    **/
+    private $addedJobCategories = null;
+
     public function __construct()
     {
         $this->created = new \DateTime();

@@ -150,4 +150,28 @@ abstract class AbstractJobLionApiTest extends WebTestCase
                "password" => $password)
           );
     }
+
+    /**
+     * Create a test Job Category
+     * @param  string      $name
+     * @return Entity\JobCategory  The created category object
+     */
+    protected function createTestJobCategory($name="Test Category") : Entity\JobCategory
+    {
+        // create test user if none exists
+        $email = "jobCategoryTestUser@example.com";
+        $user = $this->getEntityManager()->find(Entity\User::class, 1);
+        if (!$user) {
+            $user = $this->createTestUser($email);
+        }
+
+        $jobCategory = new Entity\JobCategory();
+        $jobCategory->setName($name)
+                    ->setUser($user);
+
+        $this->getEntityManager()->persist($jobCategory);
+        $this->getEntityManager()->flush();
+
+        return $jobCategory;
+    }
 }
