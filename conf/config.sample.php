@@ -7,7 +7,7 @@ $CONFIG = array(
 'isDebug' => true,
 
 /**
-* The host of the Database
+* The host of the Mysql Database
 */
 'dbHost' => '',
 
@@ -27,22 +27,22 @@ $CONFIG = array(
 'dbDatabase' => '',
 
 /**
-* The host of the Test Database
+* The host of the Test Mysql Database (:memory: for fast in memory testing)
 */
-'testDbHost' => '',
+'testDbHost' => ':memory:',
 
 /**
-* The username of the Test Database
+* The username of the Test Database (leave blank if using :memory:)
 */
 'testDbUser' => '',
 
 /**
-* The password of the Test Database
+* The password of the Test Database (leave blank if using :memory:)
 */
 'testDbPassword' => '',
 
 /**
-*  The test database name
+*  The test database name (leave blank if using :memory:)
 */
 'testDbDatabase' => '',
 
