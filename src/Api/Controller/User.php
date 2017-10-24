@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class User extends AbstractController
 {
     /**
-     * Creates a new User
-     *
-     * @param  Request $request Info about this request
-     * @return JsonResponse     Response in json format
-     *
      * @api        {post} /v1/user/create create
      * @apiName    createUser
      * @apiVersion 0.1.0
@@ -38,6 +33,12 @@ class User extends AbstractController
      *    "error": "MissingValues"
      * }
      **/
+
+    /**
+     * Creates a new User
+     * @param  Request $request Info about this request
+     * @return JsonResponse     Response in json format
+     */
     public function create(Request $request)
     {
         $email = $request->get('email');
@@ -98,11 +99,6 @@ class User extends AbstractController
     }
 
     /**
-     * Login a user
-     *
-     * @param  Request $request Info about this request
-     * @return JsonResponse     Response in json format
-     *
      * @api        {post} /v1/user/login login
      * @apiName    loginUser
      * @apiVersion 0.1.0
@@ -122,6 +118,12 @@ class User extends AbstractController
      *    "error": "MissingValues"
      * }
      **/
+
+    /**
+     * Login a user
+     * @param  Request $request Info about this request
+     * @return JsonResponse     Response in json format
+     */
     public function login(Request $request)
     {
         $email = $request->get('email');
@@ -165,11 +167,6 @@ class User extends AbstractController
     }
 
     /**
-     * Logout the current user
-     *
-     * @param  Request $request Info about this request
-     * @return JsonResponse     Response in json format
-     *
      * @api        {post} /v1/user/logout logout
      * @apiName    logoutUser
      * @apiVersion 0.1.0
@@ -179,6 +176,12 @@ class User extends AbstractController
      *
      * @apiError        NotLoggedIn           You are already logged out
      **/
+
+    /**
+     * Logout the current user
+     * @param  Request $request Info about this request
+     * @return JsonResponse     Response in json format
+     */
     public function logout(Request $request)
     {
         // check if user is already logged out
@@ -199,11 +202,6 @@ class User extends AbstractController
     }
 
     /**
-     * Get info about the current user
-     *
-     * @param  Request $request Info about this request
-     * @return JsonResponse     Response in json format
-     *
      * @api        {get} /v1/user/info login info
      * @apiName    infoUser
      * @apiVersion 0.1.0
@@ -223,6 +221,12 @@ class User extends AbstractController
      *
      * @apiError        NotLoggedIn           You are not logged in
      **/
+
+    /**
+     * Get info about the current user
+     * @param  Request $request Info about this request
+     * @return JsonResponse     Response in json format
+    */
     public function info(Request $request)
     {
         // check if user is logged in
