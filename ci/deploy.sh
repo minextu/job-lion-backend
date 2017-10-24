@@ -10,6 +10,10 @@ else
     exit
 fi
 
+# install dependencies
+apt-get update -yqq
+apt-get install git -yqq
+
 # install ssh key
 [[ -f /.dockerenv ]] && eval $(ssh-agent -s)
 [[ -f /.dockerenv ]] && ssh-add <(echo "$SSH_PRIVATE_KEY")
