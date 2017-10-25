@@ -51,6 +51,20 @@ class User
      */
     private $created;
 
+    /**
+    * @var JobCategory[] Job categories, this user added
+    *
+    * @OneToMany(targetEntity="JobCategory", mappedBy="user")
+    **/
+    private $addedJobCategories = null;
+
+    /**
+    * @var Report[] Experince reports this user submitted
+    *
+    * @OneToMany(targetEntity="ExperienceReport", mappedBy="user")
+    **/
+    private $submittedExperienceReports = null;
+
     public function __construct()
     {
         $this->created = new \DateTime();

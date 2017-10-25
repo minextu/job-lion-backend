@@ -99,11 +99,15 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     private function dropTables()
     {
         $sql = "SHOW TABLES";
+        $this->pdo->query("set foreign_key_checks=0");
+
         $tables = $this->pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
         foreach ($tables as $table) {
             $sql = "DROP TABLE `$table`";
             $this->pdo->prepare($sql)->execute();
         }
+
+        $this->pdo->query("set foreign_key_checks=1");
     }
 
     /**
@@ -149,5 +153,29 @@ abstract class AbstractJobLionApiTest extends WebTestCase
                "email" => $email,
                "password" => $password)
           );
+    }
+
+    /**
+     * Create a test Job Category
+     * @param  string      $name
+     * @return Entity\JobCategory  The created category object
+     */
+    protected function createTestJobCategory($name="Test Category") : Entity\JobCategory
+    {
+        // create test user if none exists
+        $email = "jobCategoryTestUser@example.com";
+        $user = $this->getEntityManager()->find(Entity\User::class, 1);
+        if (!$user) {
+            $user = $this->createTestUser($email);
+        }
+
+        $jobCategory = new Entity\JobCategory();
+        $jobCategory->setName($name)
+                    ->setUser($user);
+
+        $this->getEntityManager()->persist($jobCategory);
+        $this->getEntityManager()->flush();
+
+        return $jobCategory;
     }
 }

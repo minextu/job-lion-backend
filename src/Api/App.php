@@ -29,11 +29,24 @@ class App
         $app['user.controller'] = function () use ($entityManager, $app) {
             return new Controller\User($entityManager, $app);
         };
-
         $app->post('/v1/user/create', "user.controller:create");
         $app->post('/v1/user/login', "user.controller:login");
         $app->post('/v1/user/logout', "user.controller:logout");
         $app->get('/v1/user/info', "user.controller:info");
+
+        // JobCategory routes
+        $app['jobCategory.controller'] = function () use ($entityManager, $app) {
+            return new Controller\JobCategory($entityManager, $app);
+        };
+        $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
+        $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
+
+        // Report routes
+        $app['experienceReport.controller'] = function () use ($entityManager, $app) {
+            return new Controller\ExperienceReport($entityManager, $app);
+        };
+        $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
+        $app->get('/v1/experienceReport/list', "experienceReport.controller:list");
 
         return $app;
     }
