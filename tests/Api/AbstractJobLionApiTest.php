@@ -99,11 +99,15 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     private function dropTables()
     {
         $sql = "SHOW TABLES";
+        $this->pdo->query("set foreign_key_checks=0");
+
         $tables = $this->pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
         foreach ($tables as $table) {
             $sql = "DROP TABLE `$table`";
             $this->pdo->prepare($sql)->execute();
         }
+
+        $this->pdo->query("set foreign_key_checks=1");
     }
 
     /**
