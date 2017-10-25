@@ -38,9 +38,15 @@ class App
         $app['jobCategory.controller'] = function () use ($entityManager, $app) {
             return new Controller\JobCategory($entityManager, $app);
         };
-
         $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
         $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
+
+        // Report routes
+        $app['experienceReport.controller'] = function () use ($entityManager, $app) {
+            return new Controller\ExperienceReport($entityManager, $app);
+        };
+        $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
+        $app->get('/v1/experienceReport/list', "experienceReport.controller:list");
 
         return $app;
     }

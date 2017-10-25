@@ -37,6 +37,13 @@ class JobCategory
      */
     private $created;
 
+    /**
+    * @var ExperienceReport[] Experience reports for this category
+    *
+    * @ManyToMany(targetEntity="ExperienceReport", mappedBy="jobCategories")
+    **/
+    private $experienceReports = null;
+
     public function __construct()
     {
         $this->created = new \DateTime();
