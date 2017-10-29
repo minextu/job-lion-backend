@@ -3,12 +3,12 @@
 require_once __DIR__.'/../src/autoload.php';
 
 // load config file
-$configFile = new Database\ConfigFile();
+$configFile = new AppBundle\ConfigFile();
 $configFile->load();
 
 // create doctrine entity manager (access to database)
-$entityManager = Database\EntityManager::create($configFile);
+$entityManager = AppBundle\EntityManager::create($configFile);
 
 // run api
-$app = Api\App::init($entityManager, $configFile);
+$app = AppBundle\AppBundle::init($entityManager, $configFile);
 $app->run();

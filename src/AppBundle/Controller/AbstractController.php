@@ -1,7 +1,7 @@
-<?php namespace JobLion\Api\Controller;
+<?php namespace JobLion\AppBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use JobLion\Database\Entity\User;
+use JobLion\AppBundle\Entity\User;
 use Silex\Application as Silex;
 
 /**

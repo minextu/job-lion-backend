@@ -1,7 +1,7 @@
-<?php namespace JobLion\Api;
+<?php namespace JobLion\AppBundle;
 
-use JobLion\Api\AbstractJobLionApiTest;
-use JobLion\Database\Account\Password;
+use JobLion\AbstractJobLionApiTest;
+use JobLion\AppBundle\Account\Password;
 
 class UserTest extends AbstractJobLionApiTest
 {
@@ -46,7 +46,7 @@ class UserTest extends AbstractJobLionApiTest
 
         // check if user is in database
         $user = $this->getEntityManager()
-                        ->getRepository('JobLion\Database\Entity\User')
+                        ->getRepository(Entity\User::class)
                         ->findOneBy(array('email' => $email));
         $this->assertTrue($user == true, "User is not in Database");
 

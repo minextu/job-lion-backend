@@ -1,6 +1,8 @@
-<?php namespace JobLion\Api\Controller;
+<?php namespace JobLion\ExperienceReportBundle\Controller;
 
-use JobLion\Database\Entity;
+use JobLion\AppBundle\Controller\AbstractController;
+use JobLion\ExperienceReportBundle\Entity;
+use JobLion\JobCategoryBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -71,7 +73,7 @@ class ExperienceReport extends AbstractController
         $jobCategories = [];
         foreach ($jobCategoryIds as $categoryId) {
             $jobCategory = $this->entityManager
-                                  ->find(Entity\JobCategory::class, $categoryId);
+                                  ->find(JobCategoryBundle\Entity\JobCategory::class, $categoryId);
             $jobCategories[] = $jobCategory;
 
             if (!$jobCategory) {

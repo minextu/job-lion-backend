@@ -1,4 +1,4 @@
-<?php namespace JobLion\Database;
+<?php namespace JobLion\AppBundle;
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM;
@@ -18,7 +18,11 @@ class EntityManager
     {
         // load entity configs
         $entityConfig = Setup::createAnnotationMetadataConfiguration(
-          array(__DIR__."/Entity"),
+          [
+            __DIR__."/Entity",
+            __DIR__."/../ExperienceReportBundle/Entity",
+            __DIR__."/../JobCategoryBundle/Entity"
+          ],
           $configFile->get('isDebug')
         );
 
@@ -33,6 +37,7 @@ class EntityManager
           'driver' => 'pdo_mysql',
         );
 
+        // use in memory database if testing
         if ($isTest && $configFile->get($prefix . "Host") == ":memory:") {
             $connectionParams = array(
               'url' => 'sqlite:///:memory:',

@@ -1,29 +1,40 @@
-<?php namespace JobLion\Api;
+<?php namespace JobLion\AppBundle;
 
 use Silex\Application as Silex;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
-use JobLion\Database\Backend\BackendInterface;
-use JobLion\Database\ConfigFile;
+use JobLion\AppBundle\ConfigFile;
 use Doctrine\ORM\EntityManager;
 
+use JobLion\JobCategoryBundle;
+use JobLion\ExperienceReportBundle;
+
 /**
- * Initializes all api routes
+ * Initializes all api routes for all bundles
  */
-class App
+class AppBundle
 {
+    /**
+     * All bundles to init routes for
+     * @var array
+     */
+    public static $enabledBundles = [
+      "ExperienceReportBundle",
+      "JobCategoryBundle"
+    ];
+
     /**
      * Init all api routes and return the silex Application
      * @param  EntityManager $entityManager  Database entites to be used
      * @param  ConfigFile    $configFile     Config file to be used
      * @return Silex                         Silex Application
      */
-    public static function init(EntityManager $entityManager, ConfigFile $config)
+    public static function init(EntityManager $entityManager, ConfigFile $configFile)
     {
         $app = new Silex();
         $app->register(new ServiceControllerServiceProvider());
         $app->register(new SessionServiceProvider());
-        $app['debug'] = $config->get('isDebug');
+        $app['debug'] = $configFile->get('isDebug');
 
         // User routes
         $app['user.controller'] = function () use ($entityManager, $app) {
@@ -34,19 +45,11 @@ class App
         $app->post('/v1/user/logout', "user.controller:logout");
         $app->get('/v1/user/info', "user.controller:info");
 
-        // JobCategory routes
-        $app['jobCategory.controller'] = function () use ($entityManager, $app) {
-            return new Controller\JobCategory($entityManager, $app);
-        };
-        $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
-        $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
-
-        // Report routes
-        $app['experienceReport.controller'] = function () use ($entityManager, $app) {
-            return new Controller\ExperienceReport($entityManager, $app);
-        };
-        $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
-        $app->get('/v1/experienceReport/list', "experienceReport.controller:list");
+        // init all bundles
+        foreach (self::$enabledBundles as $bundle) {
+            $bundleClass = "JobLion\\$bundle\\$bundle";
+            $bundleClass::init($entityManager, $configFile, $app);
+        }
 
         return $app;
     }

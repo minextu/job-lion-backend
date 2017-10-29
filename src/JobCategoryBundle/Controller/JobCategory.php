@@ -1,6 +1,7 @@
-<?php namespace JobLion\Api\Controller;
+<?php namespace JobLion\JobCategoryBundle\Controller;
 
-use JobLion\Database\Entity;
+use JobLion\AppBundle\Controller\AbstractController;
+use JobLion\JobCategoryBundle\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

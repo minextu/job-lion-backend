@@ -1,4 +1,4 @@
-<?php namespace JobLion\Database;
+<?php namespace JobLion\AppBundle;
 
 /**
 * An instance can load and save to a configuration file
@@ -47,7 +47,7 @@ class ConfigFile
 
         $file = $this->rootDir.$this->configFile;
         if (is_file($file)) {
-            throw new Exception\Exception('This Config File does already exists.');
+            throw new Exception('This Config File does already exists.');
         }
 
         $this->save();
@@ -64,14 +64,14 @@ class ConfigFile
         $file = $this->rootDir.$this->configFile;
 
         if (!is_file($file)) {
-            throw new Exception\Exception("Config file '$file' not found!");
+            throw new Exception("Config file '$file' not found!");
         }
 
         global $CONFIG;
         include $file;
 
         if (!is_array($CONFIG)) {
-            throw new Exception\Exception('Config File is corrupt! (' . $CONFIG . ")");
+            throw new Exception('Config File is corrupt! (' . $CONFIG . ")");
         }
 
         $this->configArray = $CONFIG;
@@ -89,7 +89,7 @@ class ConfigFile
     public function set($parameter, $value)
     {
         if (!is_array($this->configArray)) {
-            throw new Exception\Exception('The Config File has to be loaded with load() first.');
+            throw new Exception('The Config File has to be loaded with load() first.');
         }
 
         $this->configArray[$parameter] = $value;
@@ -107,7 +107,7 @@ class ConfigFile
     public function get($parameter)
     {
         if (!is_array($this->configArray)) {
-            throw new Exception\Exception('The Config File has to be loaded with load() first.');
+            throw new Exception('The Config File has to be loaded with load() first.');
         }
 
         return $this->configArray[$parameter];
@@ -125,7 +125,7 @@ class ConfigFile
         $status = file_put_contents($file, $content);
 
         if ($status === false) {
-            throw new Exception\Exception("Config file could not be saved");
+            throw new Exception("Config file could not be saved");
         }
 
         return $this;

@@ -1,4 +1,4 @@
-<?php namespace JobLion\Database;
+<?php namespace JobLion\AppBundle;
 
 /**
  * Doctrine commandline config, for migrating the database

@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/Database/Exceptions.php';
-require_once __DIR__.'/Api/Exceptions.php';
 
 /**
  * Autoloader for nextjob

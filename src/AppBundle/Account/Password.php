@@ -1,8 +1,8 @@
-<?php namespace JobLion\Database\Account;
+<?php namespace JobLion\AppBundle\Account;
 
 use Hautelook\Phpass\PasswordHash;
-use JobLion\Database\Exception;
-use JobLion\Database\Entity\User;
+use JobLion\AppBundle\Exception;
+use JobLion\AppBundle\Entity\User;
 
 /**
  * Static methods for hashing and checking passwords
@@ -37,7 +37,7 @@ class Password
         if (strlen($hash) >= 20) {
             return $hash;
         } else {
-            throw new Exception\Exception("Invalid Hash");
+            throw new Exception("Invalid Hash");
         }
     }
 }

@@ -1,7 +1,7 @@
-<?php namespace JobLion\Api\Controller;
+<?php namespace JobLion\AppBundle\Controller;
 
-use JobLion\Database\Entity;
-use JobLion\Database\Account\Password;
+use JobLion\AppBundle\Entity;
+use JobLion\AppBundle\Account\Password;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

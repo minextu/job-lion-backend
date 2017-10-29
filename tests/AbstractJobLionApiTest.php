@@ -1,12 +1,14 @@
-<?php namespace JobLion\Api;
+<?php namespace JobLion;
 
 use Silex\WebTestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PDO;
-use JobLion\Database\EntityManager;
-use JobLion\Database\ConfigFile;
-use JobLion\Database\Entity;
-use JobLion\Database\Account\Password;
+use JobLion\AppBundle\AppBundle;
+use JobLion\AppBundle\EntityManager;
+use JobLion\AppBundle\ConfigFile;
+use JobLion\AppBundle\Entity;
+use JobLion\JobCategoryBundle;
+use JobLion\AppBundle\Account\Password;
 use Doctrine\ORM\Tools\SchemaTool;
 
 abstract class AbstractJobLionApiTest extends WebTestCase
@@ -24,7 +26,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      */
     public function createApplication()
     {
-        $app = App::init($this->getEntityManager(), self::$configFile);
+        $app = AppBundle::init($this->getEntityManager(), self::$configFile);
         $app['debug'] = true;
         $app['session.test'] = true;
 
@@ -158,9 +160,9 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     /**
      * Create a test Job Category
      * @param  string      $name
-     * @return Entity\JobCategory  The created category object
+     * @return JobCategoryBundle\Entity\JobCategory  The created category object
      */
-    protected function createTestJobCategory($name="Test Category") : Entity\JobCategory
+    protected function createTestJobCategory($name="Test Category") : JobCategoryBundle\Entity\JobCategory
     {
         // create test user if none exists
         $email = "jobCategoryTestUser@example.com";
@@ -169,7 +171,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
             $user = $this->createTestUser($email);
         }
 
-        $jobCategory = new Entity\JobCategory();
+        $jobCategory = new JobCategoryBundle\Entity\JobCategory();
         $jobCategory->setName($name)
                     ->setUser($user);
 

@@ -1,4 +1,4 @@
-<?php namespace JobLion\Database\Entity;
+<?php namespace JobLion\AppBundle\Entity;
 
 /**
  * User database entity
@@ -54,14 +54,14 @@ class User
     /**
     * @var JobCategory[] Job categories, this user added
     *
-    * @OneToMany(targetEntity="JobCategory", mappedBy="user")
+    * @OneToMany(targetEntity="JobLion\JobCategoryBundle\Entity\JobCategory", mappedBy="user")
     **/
     private $addedJobCategories = null;
 
     /**
     * @var Report[] Experince reports this user submitted
     *
-    * @OneToMany(targetEntity="ExperienceReport", mappedBy="user")
+    * @OneToMany(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", mappedBy="user")
     **/
     private $submittedExperienceReports = null;
 
