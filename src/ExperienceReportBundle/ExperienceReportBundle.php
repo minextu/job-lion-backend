@@ -15,7 +15,7 @@ class ExperienceReportBundle
      * @param  ConfigFile    $configFile     Config file to be used
      * @param  Silex         $app            Silex Application
      */
-    public static function init(EntityManager $entityManager, ConfigFile $config, Silex &$app)
+    public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
         $app['experienceReport.controller'] = function () use ($entityManager, $app) {
             return new Controller\ExperienceReport($entityManager, $app);

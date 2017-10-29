@@ -45,7 +45,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
             self::$inMemory = self::$configFile->get("testDbHost") == ":memory:";
         }
 
-        $this->entityManager = EntityManager::create(self::$configFile, true);
+        $this->entityManager = AppBundle::createEntityManager(self::$configFile, true);
         $this->pdo = $this->entityManager->getConnection()->getWrappedConnection();
 
         if (self::$inMemory) {

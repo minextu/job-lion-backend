@@ -7,7 +7,7 @@ $configFile = new AppBundle\ConfigFile();
 $configFile->load();
 
 // create doctrine entity manager (access to database)
-$entityManager = AppBundle\EntityManager::create($configFile);
+$entityManager = AppBundle\AppBundle::createEntityManager($configFile);
 
 // run api
 $app = AppBundle\AppBundle::init($entityManager, $configFile);
