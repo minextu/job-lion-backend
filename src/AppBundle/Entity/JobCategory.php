@@ -1,4 +1,4 @@
-<?php namespace JobLion\JobCategoryBundle\Entity;
+<?php namespace JobLion\AppBundle\Entity;
 
 /**
  * Job Category database entity
@@ -26,7 +26,7 @@ class JobCategory
      * User that added this category to database
      * @var User
      *
-     * @ManyToOne(targetEntity="JobLion\AppBundle\Entity\User", inversedBy="addedJobCategories")
+     * @ManyToOne(targetEntity="User", inversedBy="addedJobCategories")
      */
     private $user;
 

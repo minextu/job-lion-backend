@@ -7,7 +7,6 @@ use JobLion\AppBundle\AppBundle;
 use JobLion\AppBundle\EntityManager;
 use JobLion\AppBundle\ConfigFile;
 use JobLion\AppBundle\Entity;
-use JobLion\JobCategoryBundle;
 use JobLion\AppBundle\Account\Password;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -160,9 +159,9 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     /**
      * Create a test Job Category
      * @param  string      $name
-     * @return JobCategoryBundle\Entity\JobCategory  The created category object
+     * @return Entity\JobCategory  The created category object
      */
-    protected function createTestJobCategory($name="Test Category") : JobCategoryBundle\Entity\JobCategory
+    protected function createTestJobCategory($name="Test Category") : Entity\JobCategory
     {
         // create test user if none exists
         $email = "jobCategoryTestUser@example.com";
@@ -171,7 +170,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
             $user = $this->createTestUser($email);
         }
 
-        $jobCategory = new JobCategoryBundle\Entity\JobCategory();
+        $jobCategory = new Entity\JobCategory();
         $jobCategory->setName($name)
                     ->setUser($user);
 

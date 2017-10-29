@@ -41,7 +41,7 @@ class ExperienceReport
      * Job Categories for this report
      * @var JobCategory[]
      *
-     * @ManyToMany(targetEntity="JobLion\JobCategoryBundle\Entity\JobCategory", inversedBy="experienceReports")
+     * @ManyToMany(targetEntity="JobLion\AppBundle\Entity\JobCategory", inversedBy="experienceReports")
      */
     private $jobCategories = null;
 

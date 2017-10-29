@@ -54,7 +54,7 @@ class User
     /**
     * @var JobCategory[] Job categories, this user added
     *
-    * @OneToMany(targetEntity="JobLion\JobCategoryBundle\Entity\JobCategory", mappedBy="user")
+    * @OneToMany(targetEntity="JobCategory", mappedBy="user")
     **/
     private $addedJobCategories = null;
 

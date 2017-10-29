@@ -1,7 +1,7 @@
-<?php namespace JobLion\JobCategoryBundle;
+<?php namespace JobLion\AppBundle;
 
 use JobLion\AbstractJobLionApiTest;
-use JobLion\JobCategoryBundle\Entity;
+use JobLion\AppBundle\Entity;
 
 class JobCategoryTest extends AbstractJobLionApiTest
 {

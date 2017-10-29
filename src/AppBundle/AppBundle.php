@@ -4,13 +4,10 @@ use Silex\Application as Silex;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use JobLion\AppBundle\ConfigFile;
-use Doctrine\ORM\EntityManager;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM;
-
-use JobLion\JobCategoryBundle;
-use JobLion\ExperienceReportBundle;
 
 /**
  * Can init this app
@@ -23,8 +20,7 @@ class AppBundle
      */
     public static $enabledBundles = [
       "AppBundle",
-      "ExperienceReportBundle",
-      "JobCategoryBundle"
+      "ExperienceReportBundle"
     ];
 
     /**
@@ -43,6 +39,13 @@ class AppBundle
         $app->post('/v1/user/login', "user.controller:login");
         $app->post('/v1/user/logout', "user.controller:logout");
         $app->get('/v1/user/info', "user.controller:info");
+
+        // Job Category routes
+        $app['jobCategory.controller'] = function () use ($entityManager, $app) {
+            return new Controller\JobCategory($entityManager, $app);
+        };
+        $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
+        $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
     }
 
     /**
