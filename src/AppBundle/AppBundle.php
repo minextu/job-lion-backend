@@ -20,6 +20,7 @@ class AppBundle
      */
     public static $enabledBundles = [
       "AppBundle",
+      "AuthBundle",
       "ExperienceReportBundle"
     ];
 
@@ -31,15 +32,6 @@ class AppBundle
      */
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
-        // User routes
-        $app['user.controller'] = function () use ($entityManager, $app) {
-            return new Controller\User($entityManager, $app);
-        };
-        $app->post('/v1/user/create', "user.controller:create");
-        $app->post('/v1/user/login', "user.controller:login");
-        $app->post('/v1/user/logout', "user.controller:logout");
-        $app->get('/v1/user/info', "user.controller:info");
-
         // Job Category routes
         $app['jobCategory.controller'] = function () use ($entityManager, $app) {
             return new Controller\JobCategory($entityManager, $app);
@@ -81,7 +73,11 @@ class AppBundle
         // get entity folder for all bundles
         $entityFolders = [];
         foreach (self::$enabledBundles as $bundle) {
-            $entityFolders[] = __DIR__."/../$bundle/Entity";
+            $folder =  __DIR__."/../$bundle/Entity";
+
+            if (is_dir($folder)) {
+                $entityFolders[] = $folder;
+            }
         }
 
         $entityConfig = Setup::createAnnotationMetadataConfiguration(

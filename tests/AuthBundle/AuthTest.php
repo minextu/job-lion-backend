@@ -1,9 +1,10 @@
-<?php namespace JobLion\AppBundle;
+<?php namespace JobLion\AuthBundle;
 
 use JobLion\AbstractJobLionApiTest;
-use JobLion\AppBundle\Account\Password;
+use JobLion\AuthBundle\Password;
+use JobLion\AppBundle\Entity\User;
 
-class UserTest extends AbstractJobLionApiTest
+class AuthTest extends AbstractJobLionApiTest
 {
     /**
      * Create User Tests
@@ -20,7 +21,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
               "email" => $email,
               "firstName" => $firstName,
@@ -46,7 +47,7 @@ class UserTest extends AbstractJobLionApiTest
 
         // check if user is in database
         $user = $this->getEntityManager()
-                        ->getRepository(Entity\User::class)
+                        ->getRepository(User::class)
                         ->findOneBy(array('email' => $email));
         $this->assertTrue($user == true, "User is not in Database");
 
@@ -63,7 +64,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -87,7 +88,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -118,7 +119,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "example.com",
             "firstName" => "Test",
@@ -149,7 +150,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",

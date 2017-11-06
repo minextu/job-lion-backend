@@ -7,7 +7,7 @@ use JobLion\AppBundle\AppBundle;
 use JobLion\AppBundle\EntityManager;
 use JobLion\AppBundle\ConfigFile;
 use JobLion\AppBundle\Entity;
-use JobLion\AppBundle\Account\Password;
+use JobLion\AuthBundle\Password;
 use Doctrine\ORM\Tools\SchemaTool;
 
 abstract class AbstractJobLionApiTest extends WebTestCase

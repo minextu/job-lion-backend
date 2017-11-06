@@ -1,20 +1,21 @@
-<?php namespace JobLion\AppBundle\Controller;
+<?php namespace JobLion\AuthBundle\Controller;
 
+use JobLion\AppBundle\Controller\AbstractController;
 use JobLion\AppBundle\Entity;
-use JobLion\AppBundle\Account\Password;
+use JobLion\AuthBundle\Password;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * User api controller
+ * Auth api controller
  */
-class User extends AbstractController
+class Auth extends AbstractController
 {
     /**
-     * @api        {post} /v1/user/create create
-     * @apiName    createUser
+     * @api        {post} /v1/auth/register register
+     * @apiName    registerUser
      * @apiVersion 0.1.0
-     * @apiGroup   User
+     * @apiGroup   Auth
      *
      * @apiParam {String} email               User email
      * @apiParam {String} firstName           User first name
@@ -39,7 +40,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      */
-    public function create(Request $request)
+    public function register(Request $request)
     {
         $email = $request->get('email');
         $firstName = $request->get('firstName');
@@ -99,15 +100,15 @@ class User extends AbstractController
     }
 
     /**
-     * @api        {post} /v1/user/login login
+     * @api        {post} /v1/auth/login login
      * @apiName    loginUser
      * @apiVersion 0.1.0
-     * @apiGroup   User
+     * @apiGroup   Auth
      *
      * @apiParam {String} email               User email
      * @apiParam {String} password            User password
      *
-     * @apiSuccess {bool} success             Status of the login
+     * @apiSuccess {String} token             Access token
      *
      * @apiError        MissingValues         Some values weren't transmited
      * @apiError        InvalidLogin          E-Mail or Password wrong

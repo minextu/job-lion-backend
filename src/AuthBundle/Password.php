@@ -1,4 +1,4 @@
-<?php namespace JobLion\AppBundle\Account;
+<?php namespace JobLion\AuthBundle;
 
 use Hautelook\Phpass\PasswordHash;
 use JobLion\AppBundle\Exception;
