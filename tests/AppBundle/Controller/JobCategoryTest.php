@@ -13,7 +13,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
     {
         // create and login test user
         $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
 
         $name = "Test Category";
 
@@ -23,7 +23,8 @@ class JobCategoryTest extends AbstractJobLionApiTest
           'POST',
           '/v1/jobCategory/create',
           array(
-            "name" => $name
+            'name' => $name,
+            'jwt' => $token
           )
         );
 
@@ -58,7 +59,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
     {
         // create and login test user
         $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
 
         $name = "Test Category";
 
@@ -68,6 +69,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
           'POST',
           '/v1/jobCategory/create',
           array(
+            'jwt' => $token
           )
         );
 
@@ -118,13 +120,13 @@ class JobCategoryTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("NoPermissions", $answer['error'], "got wrong error");
+        $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
     }
 
     public function testJobCategoryCanNotBeCreatedTwice()
     {
         $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
 
         $name = "Test Category";
 
@@ -134,7 +136,8 @@ class JobCategoryTest extends AbstractJobLionApiTest
           'POST',
           '/v1/jobCategory/create',
           array(
-            "name" => $name
+            'name' => $name,
+            'jwt' => $token
           )
         );
 
@@ -143,7 +146,8 @@ class JobCategoryTest extends AbstractJobLionApiTest
           'POST',
           '/v1/jobCategory/create',
           array(
-            "name" => $name
+            'name' => $name,
+            'jwt' => $token
           )
         );
 

@@ -18,12 +18,11 @@ class AuthBundle
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
         // Auth routes
-        $app['auth.controller'] = function () use ($entityManager, $app) {
-            return new Controller\Auth($entityManager, $app);
+        $app['auth.controller'] = function () use ($entityManager, $app, $config) {
+            return new Controller\Auth($entityManager, $app, $config);
         };
         $app->post('/v1/auth/register', "auth.controller:register");
-        $app->post('/v1/user/login', "auth.controller:login");
-        $app->post('/v1/user/logout', "auth.controller:logout");
-        $app->get('/v1/user/info', "auth.controller:info");
+        $app->post('/v1/auth/login', "auth.controller:login");
+        $app->get('/v1/auth/info', "auth.controller:info");
     }
 }

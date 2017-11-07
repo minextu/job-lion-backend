@@ -2,7 +2,6 @@
 
 use Silex\Application as Silex;
 use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\SessionServiceProvider;
 use JobLion\AppBundle\ConfigFile;
 
 use Doctrine\ORM\EntityManager;
@@ -33,8 +32,8 @@ class AppBundle
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
         // Job Category routes
-        $app['jobCategory.controller'] = function () use ($entityManager, $app) {
-            return new Controller\JobCategory($entityManager, $app);
+        $app['jobCategory.controller'] = function () use ($entityManager, $app, $config) {
+            return new Controller\JobCategory($entityManager, $app, $config);
         };
         $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
         $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
@@ -50,7 +49,6 @@ class AppBundle
     {
         $app = new Silex();
         $app->register(new ServiceControllerServiceProvider());
-        $app->register(new SessionServiceProvider());
         $app['debug'] = $configFile->get('isDebug');
 
         // init all bundles

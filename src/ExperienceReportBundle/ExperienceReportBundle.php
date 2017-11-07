@@ -17,8 +17,8 @@ class ExperienceReportBundle
      */
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
-        $app['experienceReport.controller'] = function () use ($entityManager, $app) {
-            return new Controller\ExperienceReport($entityManager, $app);
+        $app['experienceReport.controller'] = function () use ($entityManager, $app, $config) {
+            return new Controller\ExperienceReport($entityManager, $app, $config);
         };
         $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
         $app->get('/v1/experienceReport/list', "experienceReport.controller:list");

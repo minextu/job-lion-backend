@@ -13,7 +13,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
     {
         // create and login test user
         $user = $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
 
         // create test categories
         $categoryIds = [];
@@ -39,9 +39,10 @@ class ExperienceReportTest extends AbstractJobLionApiTest
           'POST',
           '/v1/experienceReport/create',
           array(
-            "jobCategoryIds" => $categoryIds,
-            "title" => $title,
-            "text" => $text
+            'jobCategoryIds' => $categoryIds,
+            'title' => $title,
+            'text' => $text,
+            'jwt' => $token
           )
         );
 
@@ -82,7 +83,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
     {
         // create and login test user
         $user = $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
         // create test category
         $category = $this->createTestJobCategory();
 
@@ -103,8 +104,9 @@ class ExperienceReportTest extends AbstractJobLionApiTest
           'POST',
           '/v1/experienceReport/create',
           array(
-            "jobCategoryIds" => [$category->getId()],
-            "text" => $text
+            'jobCategoryIds' => [$category->getId()],
+            'text' => $text,
+            'jwt' => $token
           )
         );
 
@@ -169,14 +171,14 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("NoPermissions", $answer['error'], "got wrong error");
+        $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
     }
 
     public function testReportWithNonExistendJobCategoryThrowsError()
     {
         // create and login test user
         $user = $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
         // create test category
         $category = $this->createTestJobCategory();
 
@@ -197,9 +199,10 @@ class ExperienceReportTest extends AbstractJobLionApiTest
           'POST',
           '/v1/experienceReport/create',
           array(
-            "title" => $title,
-            "jobCategoryIds" => [1, 2],
-            "text" => $text
+            'title' => $title,
+            'jobCategoryIds' => [1, 2],
+            'text' => $text,
+            'jwt' => $token
           )
         );
 
@@ -224,7 +227,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
     {
         // create and login test user
         $user = $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
         // create test category
         $category = $this->createTestJobCategory();
 
@@ -245,9 +248,10 @@ class ExperienceReportTest extends AbstractJobLionApiTest
           'POST',
           '/v1/experienceReport/create',
           array(
-            "title" => $title,
-            "jobCategoryIds" => "1,2",
-            "text" => $text
+            'title' => $title,
+            'jobCategoryIds' => "1,2",
+            'text' => $text,
+            'jwt' => $token
           )
         );
 
@@ -281,7 +285,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
 
         // create and login test user
         $user = $this->createTestUser();
-        $this->loginTestUser();
+        $token = $this->loginTestUser();
 
         // create three test reports
         for ($i = 1; $i <= 3; $i++) {
@@ -290,9 +294,10 @@ class ExperienceReportTest extends AbstractJobLionApiTest
             'POST',
             '/v1/experienceReport/create',
             array(
-              "title" => "Report $i",
-              "jobCategoryIds" => [$i],
-              "text" => "Report text $i"
+              'title' => "Report $i",
+              'jobCategoryIds' => [$i],
+              'text' => "Report text $i",
+              'jwt' => $token
             )
           );
         }

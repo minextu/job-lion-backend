@@ -27,7 +27,6 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     {
         $app = AppBundle::init($this->getEntityManager(), self::$configFile);
         $app['debug'] = true;
-        $app['session.test'] = true;
 
         unset($app['exception_handler']);
         return $app;
@@ -151,6 +150,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      * Login the given user
      * @param  string $email
      * @param  string $password
+     * @return string Jwt login token
      */
     protected function loginTestUser($email="test@example.com", $password="abc123")
     {
@@ -158,11 +158,16 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request(
              'POST',
-             '/v1/user/login',
+             '/v1/auth/login',
              array(
                "email" => $email,
                "password" => $password)
           );
+
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+
+        return $answer['token'];
     }
 
     /**
