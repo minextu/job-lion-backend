@@ -78,6 +78,15 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     }
 
     /**
+     * Get config file object
+     * @return ConfigFile
+     */
+    final protected function getConfigFile() : ConfigFile
+    {
+        return self::$configFile;
+    }
+
+    /**
      * Migrate database using doctrine
      */
     public function setUp()
