@@ -5,7 +5,9 @@
 
 Backend (API) for Job-Lion
 
-Apidoc: [staging](https://staging.job-lion.et.tc/api/apidoc)
+Documentation: 
+[API](https://staging.job-lion.et.tc/api/apidoc),
+[Classes](https://staging.job-lion.et.tc/api/docs)
 
 ## Development
 You will need to setup apache, php, mysql (e.g. [xampp](https://www.apachefriends.org/index.html)) and [composer](https://getcomposer.org/). 
@@ -32,7 +34,7 @@ composer install
 vendor/bin/doctrine orm:schema-tool:update --dump-sql --force
 ```
 
-### Pull latest changes
+### Migrate database
 You should run `vendor/bin/doctrine orm:schema-tool:update --dump-sql --force` after every pull, to bring the database up to date.
 
 ### Unit testing (Optional)
