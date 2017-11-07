@@ -40,7 +40,21 @@ composer install
 # migrate database
 vendor/bin/doctrine orm:schema-tool:update --dump-sql --force
 
-# generate documentation
+EOSSH
+
+
+# run phpdoc and apidoc if on staging
+if [ $1 == "staging" ]; then
+  ssh -T $server << EOSSH
+
+cd $folder
+
+# generate api documentation
 apidoc -i src/ -o public/apidoc/
 
+# generate phpdoc documentation
+phpdoc -d src/ -t public/docs
+
 EOSSH
+
+fi

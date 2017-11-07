@@ -26,7 +26,7 @@ class AppBundle
     /**
      * Init all api routes for this bundle
      * @param  EntityManager $entityManager  Database entites to be used
-     * @param  ConfigFile    $configFile     Config file to be used
+     * @param  ConfigFile    $config         Config file to be used
      * @param  Silex         $app            Silex Application
      */
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
