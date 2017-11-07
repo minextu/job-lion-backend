@@ -22,7 +22,8 @@ class JobCategory extends AbstractController
      *
      * @apiError        MissingValues    Some values weren't transmited
      * @apiError        CategoryExists   A job category with this name already exists
-     * @apiError        NoPermissions    No Permissions to create job Categories (Not logged in)
+     *
+     * @apiUse Login
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -37,15 +38,13 @@ class JobCategory extends AbstractController
      */
     public function create(Request $request) : JsonResponse
     {
-        $name = $request->get('name');
-
         // check if logged in
-        if (false === $user = $this->getLogin()) {
-            return $this->app->json(
-              ["error" => "NoPermissions"],
-              401
-            );
+        $error = $this->requireLogin($request);
+        if ($error) {
+            return $error;
         }
+
+        $name = $request->get('name');
 
         // check for missing values
         if (!$name) {
@@ -69,7 +68,7 @@ class JobCategory extends AbstractController
         // create job category
         $jobCategory = new Entity\JobCategory();
         $jobCategory->setName($name)
-                    ->setUser($user);
+                    ->setUser($this->user);
 
         $this->entityManager->persist($jobCategory);
         $this->entityManager->flush();

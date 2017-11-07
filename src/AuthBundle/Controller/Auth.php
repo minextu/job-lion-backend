@@ -1,20 +1,22 @@
-<?php namespace JobLion\AppBundle\Controller;
+<?php namespace JobLion\AuthBundle\Controller;
 
+use JobLion\AppBundle\Controller\AbstractController;
 use JobLion\AppBundle\Entity;
-use JobLion\AppBundle\Account\Password;
+use JobLion\AuthBundle\Password;
+use JobLion\AuthBundle\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * User api controller
+ * Auth api controller
  */
-class User extends AbstractController
+class Auth extends AbstractController
 {
     /**
-     * @api        {post} /v1/user/create create
-     * @apiName    createUser
+     * @api        {post} /v1/auth/register register
+     * @apiName    registerUser
      * @apiVersion 0.1.0
-     * @apiGroup   User
+     * @apiGroup   Auth
      *
      * @apiParam {String} email               User email
      * @apiParam {String} firstName           User first name
@@ -39,7 +41,7 @@ class User extends AbstractController
      * @param  Request $request Info about this request
      * @return JsonResponse     Response in json format
      */
-    public function create(Request $request)
+    public function register(Request $request)
     {
         $email = $request->get('email');
         $firstName = $request->get('firstName');
@@ -99,19 +101,18 @@ class User extends AbstractController
     }
 
     /**
-     * @api        {post} /v1/user/login login
+     * @api        {post} /v1/auth/login login
      * @apiName    loginUser
      * @apiVersion 0.1.0
-     * @apiGroup   User
+     * @apiGroup   Auth
      *
      * @apiParam {String} email               User email
      * @apiParam {String} password            User password
      *
-     * @apiSuccess {bool} success             Status of the login
+     * @apiSuccess {String} token             Access token
      *
      * @apiError        MissingValues         Some values weren't transmited
      * @apiError        InvalidLogin          E-Mail or Password wrong
-     * @apiError        AlreadyLoggedIn       You are already loggedin
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -137,14 +138,6 @@ class User extends AbstractController
             );
         }
 
-        // check if user is already logged in
-        if ($this->getLogin()) {
-            return $this->app->json(
-              ["error" => "AlreadyLoggedIn"],
-              409
-            );
-        }
-
         // check if email and password are correct
         $user = $this->entityManager
                         ->getRepository(Entity\User::class)
@@ -157,57 +150,24 @@ class User extends AbstractController
             );
         }
 
-        // login user
-        $this->loginUser($user);
+        // return login token
+        $token = new Token($this->configFile, $this->entityManager);
+        $jwtToken = $token->generate($user);
 
         return $this->app->json(
-          ["success" => true],
+          ["token" => $jwtToken],
           200
         );
     }
 
     /**
-     * @api        {post} /v1/user/logout logout
-     * @apiName    logoutUser
-     * @apiVersion 0.1.0
-     * @apiGroup   User
-     *
-     * @apiSuccess {bool} success             Status of the logout
-     *
-     * @apiError        NotLoggedIn           You are already logged out
-     **/
-
-    /**
-     * Logout the current user
-     * @param  Request $request Info about this request
-     * @return JsonResponse     Response in json format
-     */
-    public function logout(Request $request)
-    {
-        // check if user is already logged out
-        if (!$this->getLogin()) {
-            return $this->app->json(
-              ["error" => "NotLoggedIn"],
-              401
-            );
-        }
-
-        // logout user
-        $this->logoutUser();
-
-        return $this->app->json(
-          ["success" => true],
-          200
-        );
-    }
-
-    /**
-     * @api        {get} /v1/user/info login info
+     * @api        {get} /v1/auth/info login info
      * @apiName    infoUser
      * @apiVersion 0.1.0
-     * @apiGroup   User
+     * @apiGroup   Auth
      *
      * @apiSuccess {Array} user               User info about you
+     * @apiUse Login
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -218,8 +178,7 @@ class User extends AbstractController
      *               "firstName" : String,
      *               "lastName" : String
      *         }
-     *
-     * @apiError        NotLoggedIn           You are not logged in
+     *     }
      **/
 
     /**
@@ -229,16 +188,15 @@ class User extends AbstractController
     */
     public function info(Request $request)
     {
-        // check if user is logged in
-        if (false === $user = $this->getLogin()) {
-            return $this->app->json(
-              ["error" => "NotLoggedIn"],
-              401
-            );
+        // check if logged in
+        $error = $this->requireLogin($request);
+        if ($error) {
+            return $error;
         }
 
+
         return $this->app->json(
-          ["user" => $user->toArray()],
+          ["user" => $this->user->toArray()],
           200
         );
     }

@@ -22,9 +22,15 @@ $CONFIG = array(
 'dbPassword' => '',
 
 /**
-*  The database name
+* The database name
 */
 'dbDatabase' => '',
+
+/**
+ * Server key for user authentication using json web tokens
+ * Generate using `php -r "echo base64_encode(openssl_random_pseudo_bytes(64));"`
+ */
+'jwtKey' => '',
 
 /**
 * The host of the Test Mysql Database (:memory: for fast in memory testing)
@@ -42,7 +48,7 @@ $CONFIG = array(
 'testDbPassword' => '',
 
 /**
-*  The test database name (leave blank if using :memory:)
+* The test database name (leave blank if using :memory:)
 */
 'testDbDatabase' => '',
 

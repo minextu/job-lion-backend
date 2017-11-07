@@ -1,5 +1,7 @@
 <?php namespace JobLion;
 
+header("Access-Control-Allow-Origin: *");
+
 require_once __DIR__.'/../src/autoload.php';
 
 // load config file

@@ -1,9 +1,10 @@
-<?php namespace JobLion\AppBundle;
+<?php namespace JobLion\AuthBundle;
 
 use JobLion\AbstractJobLionApiTest;
-use JobLion\AppBundle\Account\Password;
+use JobLion\AuthBundle\Password;
+use JobLion\AppBundle\Entity\User;
 
-class UserTest extends AbstractJobLionApiTest
+class AuthTest extends AbstractJobLionApiTest
 {
     /**
      * Create User Tests
@@ -20,7 +21,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
               "email" => $email,
               "firstName" => $firstName,
@@ -46,7 +47,7 @@ class UserTest extends AbstractJobLionApiTest
 
         // check if user is in database
         $user = $this->getEntityManager()
-                        ->getRepository(Entity\User::class)
+                        ->getRepository(User::class)
                         ->findOneBy(array('email' => $email));
         $this->assertTrue($user == true, "User is not in Database");
 
@@ -63,7 +64,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -87,7 +88,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -118,7 +119,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "example.com",
             "firstName" => "Test",
@@ -149,7 +150,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'POST',
-            '/v1/user/create',
+            '/v1/auth/register',
             array(
             "email" => "test@example.com",
             "firstName" => "Test",
@@ -190,7 +191,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/user/login',
+          '/v1/auth/login',
           array(
             "email" => $email,
             "password" => $password)
@@ -209,8 +210,8 @@ class UserTest extends AbstractJobLionApiTest
           "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // check if token exists
+        $this->assertNotEmpty($answer['token']);
     }
 
     public function testUserCanBeNotBeLoggedInWithWrongPassword()
@@ -225,7 +226,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/user/login',
+          '/v1/auth/login',
           array(
             "email" => $email,
             "password" => "wrongPassword")
@@ -260,7 +261,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/user/login',
+          '/v1/auth/login',
           array(
             "email" => "wrongEmail@example.com",
             "password" => $password)
@@ -295,10 +296,10 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/user/login',
+          '/v1/auth/login',
           array(
             "email" => $email)
-      );
+        );
 
         // decode answer
         $answer = $client->getResponse()->getContent();
@@ -317,117 +318,6 @@ class UserTest extends AbstractJobLionApiTest
         $this->assertEquals("MissingValues", $answer['error'], "got wrong error");
     }
 
-    public function testUserCanBeNotBeLoggedInTwice()
-    {
-        // create test user, to login with
-        $email = "test@example.com";
-        $password = "abc123";
-
-        $this->createTestUser($email, $password);
-
-        // login user
-        $client = $this->createClient();
-        $crawler = $client->request(
-          'POST',
-          '/v1/user/login',
-          array(
-            "email" => $email,
-            "password" => $password)
-          );
-
-        // try to login again
-        $client = $this->createClient();
-        $crawler = $client->request(
-          'POST',
-          '/v1/user/login',
-          array(
-            "email" => $email,
-            "password" => $password)
-        );
-
-        // decode answer
-        $answer = $client->getResponse()->getContent();
-        $answer = json_decode($answer, true);
-        $error = isset($answer['error']) ? $answer['error'] : false;
-        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
-
-        // check return code
-        $this->assertEquals(
-          409,
-          $client->getResponse()->getStatusCode(),
-          "error: $error, message: $errorMessage"
-        );
-
-        // check error text
-        $this->assertEquals("AlreadyLoggedIn", $answer['error'], "got wrong error");
-    }
-
-    /**
-     * Logout Tests
-     */
-
-    public function testUserCanBeLoggedOut()
-    {
-        // create test user, to login with
-        $email = "test@example.com";
-        $password = "abc123";
-
-        $this->createTestUser($email, $password);
-        $this->loginTestUser($email, $password);
-
-        // send logout request
-        $client = $this->createClient();
-        $crawler = $client->request(
-           'POST',
-           '/v1/user/logout'
-        );
-
-        // decode answer
-        $answer = $client->getResponse()->getContent();
-        $answer = json_decode($answer, true);
-        $error = isset($answer['error']) ? $answer['error'] : false;
-        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
-
-        // check return code
-        $this->assertEquals(
-           200,
-           $client->getResponse()->getStatusCode(),
-           "error: $error, message: $errorMessage"
-        );
-    }
-
-    public function testUserCanBeNotBeLoggedOutAgain()
-    {
-        // create test user
-        $email = "test@example.com";
-        $password = "abc123";
-
-        $this->createTestUser($email, $password);
-
-        // send request to logout (without login before)
-        $client = $this->createClient();
-        $crawler = $client->request(
-          'POST',
-          '/v1/user/logout'
-        );
-
-        // decode answer
-        $answer = $client->getResponse()->getContent();
-        $answer = json_decode($answer, true);
-        $error = isset($answer['error']) ? $answer['error'] : false;
-        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
-
-        // check return code
-        $this->assertEquals(
-          401,
-          $client->getResponse()->getStatusCode(),
-          "error: $error, message: $errorMessage"
-        );
-
-        // check error text
-        $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
-    }
-
     /**
      * Login info tests
      */
@@ -438,13 +328,14 @@ class UserTest extends AbstractJobLionApiTest
         $password = "abc123";
 
         $this->createTestUser($email, $password);
-        $this->loginTestUser($email, $password);
+        $token = $this->loginTestUser($email, $password);
 
         // send request to get info
         $client = $this->createClient();
         $crawler = $client->request(
            'GET',
-           '/v1/user/info'
+           '/v1/auth/info',
+           array('jwt' => $token)
         );
 
         // decode answer
@@ -469,7 +360,7 @@ class UserTest extends AbstractJobLionApiTest
         $this->assertEquals("Testus", $user['lastName']);
     }
 
-    public function testLoginUserInfoThrowsErrorWhenNotLoggedIn()
+    public function testLoginUserInfoThrowsErrorWhenNoLoginTokenIsProvided()
     {
         // create test user, to login with
         $email = "test@example.com";
@@ -481,7 +372,7 @@ class UserTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'GET',
-          '/v1/user/info'
+          '/v1/auth/info'
         );
 
         // decode answer

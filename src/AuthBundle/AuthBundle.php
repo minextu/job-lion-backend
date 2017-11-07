@@ -1,4 +1,4 @@
-<?php namespace JobLion\ExperienceReportBundle;
+<?php namespace JobLion\AuthBundle;
 
 use Silex\Application as Silex;
 use JobLion\AppBundle\ConfigFile;
@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 /**
  * Can Initialize all api routes for this bundle
  */
-class ExperienceReportBundle
+class AuthBundle
 {
     /**
      * Init all api routes for this bundle
@@ -17,10 +17,12 @@ class ExperienceReportBundle
      */
     public static function setRoutes(EntityManager $entityManager, ConfigFile $config, Silex &$app)
     {
-        $app['experienceReport.controller'] = function () use ($entityManager, $app, $config) {
-            return new Controller\ExperienceReport($entityManager, $app, $config);
+        // Auth routes
+        $app['auth.controller'] = function () use ($entityManager, $app, $config) {
+            return new Controller\Auth($entityManager, $app, $config);
         };
-        $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
-        $app->get('/v1/experienceReport/list', "experienceReport.controller:list");
+        $app->post('/v1/auth/register', "auth.controller:register");
+        $app->post('/v1/auth/login', "auth.controller:login");
+        $app->get('/v1/auth/info', "auth.controller:info");
     }
 }

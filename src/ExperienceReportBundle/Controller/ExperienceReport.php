@@ -26,7 +26,8 @@ class ExperienceReport extends AbstractController
      * @apiError        MissingValues       Some values weren't transmited
      * @apiError        InvalidCategory     Job Category id does not exist
      * @apiError        MalformedCategories jobCategoryids is not an array
-     * @apiError        NoPermissions       No Permissions to create job Categories (Not logged in)
+     *
+     * @apiUse Login
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -41,17 +42,15 @@ class ExperienceReport extends AbstractController
      */
     public function create(Request $request) : JsonResponse
     {
+        // check if logged in
+        $error = $this->requireLogin($request);
+        if ($error) {
+            return $error;
+        }
+
         $title = $request->get('title');
         $text = $request->get('text');
         $jobCategoryIds = $request->get('jobCategoryIds');
-
-        // check if logged in
-        if (false === $user = $this->getLogin()) {
-            return $this->app->json(
-              ["error" => "NoPermissions"],
-              401
-            );
-        }
 
         // check for missing values
         if (!$title || !$text || !$jobCategoryIds) {
@@ -88,8 +87,8 @@ class ExperienceReport extends AbstractController
         $report = new Entity\ExperienceReport();
         $report->setTitle($title)
                ->setText($text)
-                ->setJobCategories($jobCategories)
-                ->setUser($user);
+               ->setJobCategories($jobCategories)
+               ->setUser($this->user);
 
         $this->entityManager->persist($report);
         $this->entityManager->flush();
