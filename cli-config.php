@@ -11,6 +11,6 @@ $configFile = new ConfigFile();
 $configFile->load();
 
 // create doctrine entity manager
-$entityManager = EntityManager::create($configFile);
+$entityManager = AppBundle::createEntityManager($configFile);
 
 return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
