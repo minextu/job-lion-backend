@@ -49,12 +49,9 @@ class TokenTest extends AbstractJobLionApiTest
     {
         $testUser = $this->createTestUser();
 
-        // generate login token that's only valid for 1 second
+        // generate login token that's invalid since 1 second
         $token = new Token($this->getConfigFile(), $this->getEntityManager());
-        $tokenString = $token->generate($testUser, 1);
-
-        // wait 1 second
-        sleep(1);
+        $tokenString = $token->generate($testUser, -1);
 
         // try to get user from token (should throw exception)
         $user = $token->getUser($tokenString);
