@@ -61,7 +61,7 @@ abstract class AbstractController
      * @param  Request $request  Info about this request
      * @return JsonResponse      Error response when token is invalid, Empty otherwise
      */
-    public function requireLogin(Request $request)
+    protected function requireLogin(Request $request)
     {
         try {
             // extract jwt token
