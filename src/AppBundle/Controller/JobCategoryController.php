@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * JobCategory api controller
  */
-class JobCategory extends AbstractController
+class JobCategoryController extends AbstractController
 {
     /**
      * @api        {post} /v1/jobCategory/create create

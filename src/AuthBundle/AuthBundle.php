@@ -19,7 +19,7 @@ class AuthBundle
     {
         // Auth routes
         $app['auth.controller'] = function () use ($entityManager, $app, $config) {
-            return new Controller\Auth($entityManager, $app, $config);
+            return new Controller\AuthController($entityManager, $app, $config);
         };
         $app->post('/v1/auth/register', "auth.controller:register");
         $app->post('/v1/auth/login', "auth.controller:login");

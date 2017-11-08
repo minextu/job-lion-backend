@@ -33,7 +33,7 @@ class AppBundle
     {
         // Job Category routes
         $app['jobCategory.controller'] = function () use ($entityManager, $app, $config) {
-            return new Controller\JobCategory($entityManager, $app, $config);
+            return new Controller\JobCategoryController($entityManager, $app, $config);
         };
         $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
         $app->get('/v1/jobCategory/list', "jobCategory.controller:list");

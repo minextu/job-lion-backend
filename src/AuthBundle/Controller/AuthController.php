@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Auth api controller
  */
-class Auth extends AbstractController
+class AuthController extends AbstractController
 {
     /**
      * @api        {post} /v1/auth/register register

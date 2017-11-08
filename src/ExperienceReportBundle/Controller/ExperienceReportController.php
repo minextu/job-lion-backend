@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Experience Report api controller
  */
-class ExperienceReport extends AbstractController
+class ExperienceReportController extends AbstractController
 {
     /**
      * @api        {post} /v1/experienceReport/create create
