@@ -58,6 +58,14 @@ class ExperienceReport
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -153,7 +161,8 @@ class ExperienceReport
           "id" => $this->getId(),
           "title" => $this->getTitle(),
           "jobCategories" => $categoryArray,
-          "user" => $this->getUser()->toArray()
+          "user" => $this->getUser()->toArray(),
+          "created" => $this->getCreated()->format(\DateTime::ATOM)
       ];
     }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ExperienceReportController extends AbstractController
 {
     /**
-     * @api        {post} /v1/experienceReport/create create
+     * @api        {post} /v1/experienceReports/ create
      * @apiName    createExperienceReport
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
@@ -94,27 +94,33 @@ class ExperienceReportController extends AbstractController
         $this->entityManager->flush();
 
         // return success
-        return $this->app->json(
-          ["success" => true],
-          200
-        );
+        $response = new JsonResponse(["success" => true], 201);
+        $url = $this->generateUrl('experienceReports', $report->getId());
+        $response->headers->set('Location', $url);
+
+        return $response;
     }
 
     /**
-     * @api        {get} /v1/experienceReport/list list
+     * @api        {get} /v1/experienceReports/ list
      * @apiName    listExperienceReport
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
-     * @apiSuccess {array} experienceReports  List of experience reports
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *         "experienceReports" : [
+     *         [
      *             {
-     *               "id": Number
+     *               "id": Number,
      *               "title": String,
-     *               "user"
+     *               "user": {
+     *                 "id": Number,
+     *                 "email": String,
+     *                 "firstName": String,
+     *                 "lastName": String
+     *               },
+     *               "created": String
      *             }
      *         ]
      */
@@ -133,12 +139,65 @@ class ExperienceReportController extends AbstractController
                                 ->findAll();
         // get info array
         array_walk($experienceReports, function (&$value, &$key) {
-            $value = $value->toArray();
+            $value = $value->toArray(true);
         });
 
         // return all categories
         return $this->app->json(
-          ["experienceReports" => $experienceReports],
+          $experienceReports,
+          200
+        );
+    }
+
+    /**
+     * @api        {get} /v1/experienceReports/:id get
+     * @apiName    getExperienceReport
+     * @apiVersion 0.1.0
+     * @apiGroup   Experience Report
+     *
+     * @apiParam {Number} id        Id of job category
+     *
+     * @apiError          NotFound  Job Category not found
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         {
+     *           "id": Number,
+     *           "title": String,
+     *           "user": {
+     *             "id": Number,
+     *             "email": String,
+     *             "firstName": String,
+     *             "lastName": String
+     *            },
+     *            "created": String
+     *          }
+     */
+
+    /**
+     * Get experience report with given id
+     * @param  Request $request Info about this request
+     * @param  int     $id      Id of report
+     * @return JsonResponse     Response in json format
+     */
+    public function get(Request $request, $id) : JsonResponse
+    {
+        // get experience report with given id
+
+        $experienceReport = $this->entityManager
+                              ->find(Entity\ExperienceReport::class, $id);
+
+        if (!$experienceReport) {
+            return $this->app->json(
+              ["error" => "NotFound"],
+              404
+            );
+        }
+
+        // return report
+        return $this->app->json(
+          $experienceReport->toArray(),
           200
         );
     }

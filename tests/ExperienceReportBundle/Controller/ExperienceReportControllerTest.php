@@ -37,7 +37,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/experienceReport/create',
+          '/v1/experienceReports/',
           array(
             'jobCategoryIds' => $categoryIds,
             'title' => $title,
@@ -54,7 +54,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
 
         // check return code
         $this->assertEquals(
-          200,
+          201,
           $client->getResponse()->getStatusCode(),
           "error: $error, message: $errorMessage"
         );
@@ -102,7 +102,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/experienceReport/create',
+          '/v1/experienceReports/',
           array(
             'jobCategoryIds' => [$category->getId()],
             'text' => $text,
@@ -149,7 +149,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/experienceReport/create',
+          '/v1/experienceReports/',
           array(
             "title" => $title,
             "jobCategoryIds" => [$category->getId()],
@@ -197,7 +197,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/experienceReport/create',
+          '/v1/experienceReports/',
           array(
             'title' => $title,
             'jobCategoryIds' => [1, 2],
@@ -246,7 +246,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/experienceReport/create',
+          '/v1/experienceReports/',
           array(
             'title' => $title,
             'jobCategoryIds' => "1,2",
@@ -292,7 +292,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
             $client = $this->createClient();
             $crawler = $client->request(
             'POST',
-            '/v1/experienceReport/create',
+            '/v1/experienceReports/',
             array(
               'title' => "Report $i",
               'jobCategoryIds' => [$i],
@@ -313,7 +313,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
            'GET',
-           '/v1/experienceReport/list'
+           '/v1/experienceReports/'
          );
 
         // decode answer
@@ -330,8 +330,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
          );
 
         // check response
-        $this->assertArrayHasKey("experienceReports", $answer, "Reports weren't returned");
-        $experienceReports = $answer['experienceReports'];
+        $experienceReports = $answer;
         $this->assertCount(3, $experienceReports, "Three reports were created, so there should be 3 entries in the array");
 
         foreach ($experienceReports as $i => $report) {
@@ -341,5 +340,71 @@ class ExperienceReportTest extends AbstractJobLionApiTest
             $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
             $this->assertEquals($i+1, $report['jobCategories'][0]['id'], "Job category is not valid");
         }
+    }
+
+    /**
+     * Get tests
+     */
+
+    public function testReportsCanBeReturned()
+    {
+        $user = $this->createTestReports();
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+            'GET',
+            '/v1/experienceReports/1'
+          );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+            200,
+            $client->getResponse()->getStatusCode(),
+            "error: $error, message: $errorMessage"
+          );
+
+        // check response
+        $report = $answer;
+
+        $this->assertEquals(1, $report['id'], "Id is not valid");
+        $this->assertEquals("Report 1", $report['title'], "Title is not valid");
+        $this->assertEquals($user->toArray(), $report['user'], "User is not valid");
+        $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
+        $this->assertEquals(1, $report['jobCategories'][0]['id'], "Job category is not valid");
+    }
+
+    public function testReportWithWrongIdCanNotBeReturned()
+    {
+        $user = $this->createTestReports();
+
+        // send request with invalid id
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/experienceReports/invalid'
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          404,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("NotFound", $answer['error'], "got wrong error");
     }
 }

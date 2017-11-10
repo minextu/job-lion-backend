@@ -50,6 +50,14 @@ class JobCategory
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -95,13 +103,15 @@ class JobCategory
 
     /**
       * Convert object to info array
-      * @return array info array
+      * @return array       info array
       */
     public function toArray()
     {
         return [
-          "id" => $this->getId(),
-          "name" => $this->getName()
+          'id' => $this->getId(),
+          'name' => $this->getName(),
+          'user' => $this->getUser()->toArray(),
+          'created' => $this->getCreated()->format(\DateTime::ATOM)
         ];
     }
 }

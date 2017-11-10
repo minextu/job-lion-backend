@@ -21,7 +21,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/jobCategory/create',
+          '/v1/jobCategories/',
           array(
             'name' => $name,
             'jwt' => $token
@@ -36,7 +36,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
 
         // check return code
         $this->assertEquals(
-          200,
+          201,
           $client->getResponse()->getStatusCode(),
           "error: $error, message: $errorMessage"
         );
@@ -67,7 +67,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/jobCategory/create',
+          '/v1/jobCategories/',
           array(
             'jwt' => $token
           )
@@ -100,7 +100,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/jobCategory/create',
+          '/v1/jobCategories/',
           array(
             "name" => $name
           )
@@ -134,7 +134,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          '/v1/jobCategory/create',
+          '/v1/jobCategories/',
           array(
             'name' => $name,
             'jwt' => $token
@@ -144,7 +144,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         // create category again
         $crawler = $client->request(
           'POST',
-          '/v1/jobCategory/create',
+          '/v1/jobCategories/',
           array(
             'name' => $name,
             'jwt' => $token
@@ -183,7 +183,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'GET',
-          '/v1/jobCategory/list'
+          '/v1/jobCategories/'
         );
 
         // decode answer
@@ -200,8 +200,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
         );
 
         // check response
-        $this->assertArrayHasKey("jobCategories", $answer, "Job Categories weren't returned");
-        $jobCategories = $answer['jobCategories'];
+        $jobCategories = $answer;
         $this->assertCount(3, $jobCategories, "Three Categories were created, so there should be 3 entries in the array");
 
         for ($i = 0; $i < 3; $i++) {
@@ -217,5 +216,85 @@ class JobCategoryTest extends AbstractJobLionApiTest
                 "Name was not returned correctly"
             );
         }
+    }
+
+
+    /**
+     * Get Tests
+     */
+
+    public function testJobCategoryCanBeReturned()
+    {
+        // create test categories
+        $this->createTestJobCategory("Test Category 1");
+        $this->createTestJobCategory("Test Category 2");
+        $this->createTestJobCategory("Test Category 3");
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/jobCategories/1'
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          200,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check response
+        $jobCategory = $answer;
+
+
+        $this->assertEquals(
+          1,
+          $jobCategory['id'],
+          "Id is not valid"
+        );
+
+        $this->assertEquals(
+          "Test Category 1",
+          $jobCategory['name'],
+          "Name was not returned correctly"
+        );
+    }
+
+    public function testJobCategoryWithWrongIdCanNotBeReturned()
+    {
+        // create test categories
+        $this->createTestJobCategory("Test Category 1");
+        $this->createTestJobCategory("Test Category 2");
+        $this->createTestJobCategory("Test Category 3");
+
+        // send request with invalid id
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/jobCategories/invalid'
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          404,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("NotFound", $answer['error'], "got wrong error");
     }
 }

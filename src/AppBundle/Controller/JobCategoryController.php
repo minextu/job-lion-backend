@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class JobCategoryController extends AbstractController
 {
     /**
-     * @api        {post} /v1/jobCategory/create create
+     * @api        {post} /v1/jobCategories/ create
      * @apiName    createJobCategory
      * @apiVersion 0.1.0
      * @apiGroup   Job Category
@@ -74,28 +74,36 @@ class JobCategoryController extends AbstractController
         $this->entityManager->flush();
 
         // return success
-        return $this->app->json(
-          ["success" => true],
-          200
-        );
+        $response = new JsonResponse(["success" => true], 201);
+        $url = $this->generateUrl('jobCategories', $jobCategory->getId());
+        $response->headers->set('Location', $url);
+
+        return $response;
     }
 
     /**
-     * @api        {get} /v1/jobCategory/list list
+     * @api        {get} /v1/jobCategories/ list
      * @apiName    listJobCategories
      * @apiVersion 0.1.0
      * @apiGroup   Job Category
      *
-     * @apiSuccess {array} jobCategories  List of job categories
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *         "jobCategories" : [
-     *             {
-     *               "id": Number
-     *               "name": String
-     *             }
-     *         ]
+     *       [
+     *         {
+     *           "id": Number
+     *           "name": String,
+     *           "user": {
+     *             "id" : Number,
+     *             "email": String,
+     *             "firstName": String,
+     *             "lastName" : String
+     *            },
+     *            "created": String
+     *          }
+     *       ]
+     *     }
      */
 
     /**
@@ -117,7 +125,58 @@ class JobCategoryController extends AbstractController
 
         // return all categories
         return $this->app->json(
-          ["jobCategories" => $jobCategories],
+          $jobCategories,
+          200
+        );
+    }
+
+    /**
+     * @api        {get} /v1/jobCategories/:id get
+     * @apiName    getJobCategory
+     * @apiVersion 0.1.0
+     * @apiGroup   Job Category
+     *
+     * @apiParam {Number} id        Id of job category
+     *
+     * @apiError          NotFound  Job Category not found
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "id": Number
+     *       "name": String,
+     *       "user": {
+     *         "id" : Number,
+     *         "email": String,
+     *         "firstName": String,
+     *         "lastName" : String
+     *       },
+     *       "created": String
+     *     }
+     */
+
+    /**
+     * Return job given job category
+     * @param  Request $request Info about this request
+     * @param  int     $id      Job Category id
+     * @return JsonResponse     Response in json format
+     */
+    public function get(Request $request, $id) : JsonResponse
+    {
+        // get given job category
+        $jobCategory = $this->entityManager
+                            ->find(Entity\JobCategory::class, $id);
+
+        if (!$jobCategory) {
+            return $this->app->json(
+              ["error" => "NotFound"],
+              404
+            );
+        }
+
+        // return all categories
+        return $this->app->json(
+          $jobCategory->toArray(),
           200
         );
     }

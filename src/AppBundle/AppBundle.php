@@ -35,8 +35,9 @@ class AppBundle
         $app['jobCategory.controller'] = function () use ($entityManager, $app, $config) {
             return new Controller\JobCategoryController($entityManager, $app, $config);
         };
-        $app->post('/v1/jobCategory/create', "jobCategory.controller:create");
-        $app->get('/v1/jobCategory/list', "jobCategory.controller:list");
+        $app->post('/v1/jobCategories/', "jobCategory.controller:create");
+        $app->get('/v1/jobCategories/', "jobCategory.controller:list");
+        $app->get('/v1/jobCategories/{id}', "jobCategory.controller:get");
     }
 
     /**

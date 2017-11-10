@@ -20,7 +20,8 @@ class ExperienceReportBundle
         $app['experienceReport.controller'] = function () use ($entityManager, $app, $config) {
             return new Controller\ExperienceReportController($entityManager, $app, $config);
         };
-        $app->post('/v1/experienceReport/create', "experienceReport.controller:create");
-        $app->get('/v1/experienceReport/list', "experienceReport.controller:list");
+        $app->post('/v1/experienceReports/', "experienceReport.controller:create");
+        $app->get('/v1/experienceReports/', "experienceReport.controller:list");
+        $app->get('/v1/experienceReports/{id}', "experienceReport.controller:get");
     }
 }

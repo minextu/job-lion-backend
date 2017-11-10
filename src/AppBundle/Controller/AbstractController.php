@@ -81,4 +81,15 @@ abstract class AbstractController
             );
         }
     }
+
+    /**
+     * Generate api url for new resources
+     * @param  string $resource Api path
+     * @param  int $id          Id of new resource
+     * @return string           Url to resource
+     */
+    protected function generateUrl($resource, $id)
+    {
+        return "/api/v1/$resource/$id";
+    }
 }
