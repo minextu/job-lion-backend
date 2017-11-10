@@ -160,6 +160,7 @@ class ExperienceReport
         return [
           "id" => $this->getId(),
           "title" => $this->getTitle(),
+          "text" => $this->getText(),
           "jobCategories" => $categoryArray,
           "user" => $this->getUser()->toArray(),
           "created" => $this->getCreated()->format(\DateTime::ATOM)
