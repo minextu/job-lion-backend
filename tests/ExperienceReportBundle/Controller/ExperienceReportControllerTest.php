@@ -223,13 +223,18 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         $this->assertEquals("InvalidCategory", $answer['error'], "got wrong error");
     }
 
-    public function testReportWithMalformedJobCategoryThrowsError()
+    public function testReportWithCommaSeperatedJobCategories()
     {
         // create and login test user
         $user = $this->createTestUser();
         $token = $this->loginTestUser();
-        // create test category
-        $category = $this->createTestJobCategory();
+
+        // create test categories
+        $categoryIds = [];
+        for ($i = 0; $i < 2; $i++) {
+            $category = $this->createTestJobCategory("Test Category $i");
+            $categoryIds[] = $category->getId();
+        }
 
         $title = "Test Report";
         $text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -263,14 +268,27 @@ class ExperienceReportTest extends AbstractJobLionApiTest
 
         // check return code
         $this->assertEquals(
-          400,
+          201,
           $client->getResponse()->getStatusCode(),
           "error: $error, message: $errorMessage"
         );
 
-        // check error text
-        $this->assertEquals("MalformedCategories", $answer['error'], "got wrong error");
+        $report = $this->getEntityManager()
+                          ->find(Entity\ExperienceReport::class, 1);
+        $this->assertTrue($report == true, "Report is not in Database");
+
+        // check if values were saved correctly
+        $this->assertEquals($title, $report->getTitle());
+        $this->assertEquals($text, $report->getText());
+        $this->assertEquals($user->getId(), $report->getUser()->getId());
+
+        $jobCategories = $report->getJobCategories();
+        $this->assertCount(2, $jobCategories, "Two Categories were added, so there should be 2 entries in the array");
+        foreach ($categoryIds as $key => $categoryId) {
+            $this->assertEquals($categoryId, $jobCategories[$key]->getId());
+        }
     }
+
 
     /**
      * List Tests

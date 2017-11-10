@@ -52,18 +52,15 @@ class ExperienceReportController extends AbstractController
         $text = $request->get('text');
         $jobCategoryIds = $request->get('jobCategoryIds');
 
+        // allow comma separated list
+        if (!is_array($jobCategoryIds)) {
+            $jobCategoryIds = explode(',', $jobCategoryIds);
+        }
+
         // check for missing values
         if (!$title || !$text || !$jobCategoryIds) {
             return $this->app->json(
               ["error" => "MissingValues"],
-              400
-            );
-        }
-
-        // check for malformed categories
-        if (!is_array($jobCategoryIds)) {
-            return $this->app->json(
-              ["error" => "MalformedCategories"],
               400
             );
         }
