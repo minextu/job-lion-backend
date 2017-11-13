@@ -55,6 +55,55 @@ class JobCategoryTest extends AbstractJobLionApiTest
         $this->assertEquals(1, $jobCategory->getUser()->getId());
     }
 
+    public function testJobCategoryCanBeCreatedUsingJson()
+    {
+        // create and login test user
+        $this->createTestUser();
+        $token = $this->loginTestUser();
+
+        $name = "Test Category";
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'POST',
+          '/v1/jobCategories/',
+          array(),
+          array(),
+          array('CONTENT_TYPE' => 'application/json'),
+          json_encode([
+            'name' => $name,
+            'jwt' => $token
+          ])
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          201,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check success answer
+        $this->assertTrue($answer['success']);
+
+        // check if job category is in database
+        $jobCategory = $this->getEntityManager()
+                              ->getRepository(Entity\JobCategory::class)
+                              ->findOneBy(array('name' => $name));
+        $this->assertTrue($jobCategory == true, "Job Category is not in Database");
+
+        // check if values were saved correctly
+        $this->assertEquals($name, $jobCategory->getName());
+        $this->assertEquals(1, $jobCategory->getUser()->getId());
+    }
+
     public function testJobCategoryWithMissingValuesThrowsError()
     {
         // create and login test user

@@ -2,6 +2,7 @@
 
 use Silex\Application as Silex;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
 use JobLion\AppBundle\ConfigFile;
 
 use Doctrine\ORM\EntityManager;
@@ -51,6 +52,14 @@ class AppBundle
         $app = new Silex();
         $app->register(new ServiceControllerServiceProvider());
         $app['debug'] = $configFile->get('isDebug');
+
+        // support json requests
+        $app->before(function (Request $request) {
+            if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+                $data = json_decode($request->getContent(), true);
+                $request->request->replace(is_array($data) ? $data : array());
+            }
+        });
 
         // init all bundles
         foreach (self::$enabledBundles as $bundle) {
