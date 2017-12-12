@@ -1,5 +1,7 @@
 <?php namespace JobLion\AppBundle\Entity;
 
+use JobLion\ExperienceReportBundle\Entity\ExperienceReport;
+
 /**
  * Job Category database entity
  *

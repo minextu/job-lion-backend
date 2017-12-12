@@ -104,6 +104,10 @@ class ExperienceReportController extends AbstractController
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
+     * @apiParam {String} [jobCategoryId]      Id of job category to show reports for (empty to show reports for all categories)
+     * @apiParam {Number} [offset=0]           Number of reports to skip
+     * @apiParam {Number} [limit=0]            Number of reports to show (0 for all)
+     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -129,11 +133,16 @@ class ExperienceReportController extends AbstractController
      */
     public function list(Request $request) : JsonResponse
     {
+        $jobCategoryId = $request->get('jobCategoryId');
+        $offset = $request->get('offset');
+        $limit = $request->get('limit');
+
         // get all experience reports
 
         $experienceReports = $this->entityManager
                                 ->getRepository(Entity\ExperienceReport::class)
-                                ->findAll();
+                                ->findByJobCategory($jobCategoryId, $offset, $limit);
+
         // get info array
         array_walk($experienceReports, function (&$value, &$key) {
             $value = $value->toArray(true);

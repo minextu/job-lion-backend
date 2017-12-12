@@ -3,7 +3,7 @@
 /**
  * Experience Report database entity
  *
- * @Entity
+ * @Entity(repositoryClass="JobLion\ExperienceReportBundle\Repository\ExperienceReportRepository")
  * @Table(name="experienceReports")
  */
 class ExperienceReport

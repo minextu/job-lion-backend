@@ -294,7 +294,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
      * List Tests
      */
 
-    private function createTestReports()
+    private function createTestReports($extra=false)
     {
         // create test categories
         $this->createTestJobCategory("Test Category 1");
@@ -309,15 +309,31 @@ class ExperienceReportTest extends AbstractJobLionApiTest
         for ($i = 1; $i <= 3; $i++) {
             $client = $this->createClient();
             $crawler = $client->request(
-            'POST',
-            '/v1/experienceReports/',
-            array(
-              'title' => "Report $i",
-              'jobCategoryIds' => [$i],
-              'text' => "Report text $i",
-              'jwt' => $token
-            )
-          );
+              'POST',
+              '/v1/experienceReports/',
+              array(
+                'title' => "Report $i",
+                'jobCategoryIds' => [$i],
+                'text' => "Report text $i",
+                'jwt' => $token
+              )
+            );
+        }
+
+        if ($extra) {
+            for ($i = 4; $i <= 5; $i++) {
+                $client = $this->createClient();
+                $crawler = $client->request(
+                  'POST',
+                  '/v1/experienceReports/',
+                  array(
+                    'title' => "Report $i",
+                    'jobCategoryIds' => [1],
+                    'text' => "Report text $i",
+                    'jwt' => $token
+                  )
+                );
+            }
         }
 
         return $user;
@@ -358,6 +374,47 @@ class ExperienceReportTest extends AbstractJobLionApiTest
             $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
             $this->assertEquals($i+1, $report['jobCategories'][0]['id'], "Job category is not valid");
         }
+    }
+
+    public function testReportsCanBeListedWithParameters()
+    {
+        $user = $this->createTestReports(true);
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+           'GET',
+           '/v1/experienceReports/',
+           array(
+             'jobCategoryId' => 1,
+             'limit' => 1,
+             'offset' => 1
+           )
+         );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+           200,
+           $client->getResponse()->getStatusCode(),
+           "error: $error, message: $errorMessage"
+         );
+
+        // check response
+        $experienceReports = $answer;
+        $this->assertCount(1, $experienceReports, "Only one report matches the criteria, so there should be one entry in the array");
+
+        $report = $experienceReports[0];
+        $this->assertEquals(4, $report['id'], "Id is not valid");
+        $this->assertEquals("Report 4", $report['title'], "Title is not valid");
+        $this->assertEquals($user->toArray(), $report['user'], "User is not valid");
+        $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
+        $this->assertEquals(1, $report['jobCategories'][0]['id'], "Job category is not valid");
     }
 
     /**
