@@ -52,6 +52,20 @@ class User
     private $created;
 
     /**
+     * @var boolean
+     *
+     * @Column(type="boolean", nullable=false)
+     */
+    private $activated;
+
+    /**
+     * @var activationKey
+     *
+     * @Column(type="string", nullable=true)
+     */
+    private $activationCode;
+
+    /**
     * @var JobCategory[] Job categories, this user added
     *
     * @OneToMany(targetEntity="JobCategory", mappedBy="user")
@@ -68,6 +82,7 @@ class User
     public function __construct()
     {
         $this->created = new \DateTime();
+        $this->activated = false;
     }
 
     /**
@@ -149,6 +164,44 @@ class User
     public function setHash($hash)
     {
         $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * @return string boolean
+     */
+    public function getActivated()
+    {
+        return $this->activated;
+    }
+
+    /**
+     * @param boolean $activated
+     * @return User
+     */
+    public function setActivated($activated)
+    {
+        $this->activated = $activated;
+
+        return $this;
+    }
+
+    /**
+     * @return string string
+     */
+    public function getActivationCode()
+    {
+        return $this->activationCode;
+    }
+
+    /**
+     * @param boolean $activationCode
+     * @return User
+     */
+    public function setActivationCode($activationCode)
+    {
+        $this->activationCode = $activationCode;
 
         return $this;
     }

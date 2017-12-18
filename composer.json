@@ -16,7 +16,8 @@
         "doctrine/orm": "2.4.*",
         "silex/silex": "~2.0",
         "hautelook/phpass": "^1.1",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "phpmailer/phpmailer": "^6.0"
     },
     "require-dev": {
         "phpunit/dbunit": "^3.0",

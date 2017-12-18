@@ -1,9 +1,12 @@
 <?php namespace JobLion\AuthBundle\Controller;
 
 use JobLion\AppBundle\Controller\AbstractController;
+
 use JobLion\AppBundle\Entity;
 use JobLion\AuthBundle\Password;
 use JobLion\AuthBundle\Token;
+use JobLion\AuthBundle\ConfirmationMail;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -85,12 +88,16 @@ class AuthController extends AbstractController
 
         // create user
         $user = new Entity\User();
-        $user->setEmail($email);
-        $user->setFirstName($firstName);
-        $user->setLastName($lastName);
-        $user->setHash(Password::hash($password));
+        $user->setEmail($email)
+             ->setFirstName($firstName)
+             ->setLastName($lastName)
+             ->setHash(Password::hash($password));
+
 
         $this->entityManager->persist($user);
+
+        // generate and send confirmation code
+        ConfirmationMail::accountActivation($user, $this->app['isTest']);
         $this->entityManager->flush();
 
         // return success
@@ -113,6 +120,7 @@ class AuthController extends AbstractController
      *
      * @apiError        MissingValues         Some values weren't transmited
      * @apiError        InvalidLogin          E-Mail or Password wrong
+     * @apiError        NotActivated          Confirmation E-Mail has not been clicked on
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -146,6 +154,14 @@ class AuthController extends AbstractController
         if (!$user || !Password::check($user, $password)) {
             return $this->app->json(
               ["error" => "InvalidLogin"],
+              401
+            );
+        }
+
+        // check if account has been activated
+        if (!$user->getActivated()) {
+            return $this->app->json(
+              ["error" => "NotActivated"],
               401
             );
         }
@@ -197,6 +213,62 @@ class AuthController extends AbstractController
 
         return $this->app->json(
           ["user" => $this->user->toArray()],
+          200
+        );
+    }
+
+    /**
+     * @api        {get} /v1/auth/activate activate
+     * @apiName    activateUser
+     * @apiVersion 0.1.0
+     * @apiGroup   Auth
+     *
+     * @apiParam {Number} user                User id
+     * @apiParam {String} code                Confirmation code
+     *
+     * @apiError        MissingValues         Some values weren't transmited
+     * @apiError        Invalid               Id or code wrong
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 400 Bad Request
+     * {
+     *    "error": "MissingValues"
+     * }
+     **/
+
+    /**
+     * Activate a user
+     * @param  Request $request Info about this request
+     * @return JsonResponse     Response in json format
+     */
+    public function activate(Request $request)
+    {
+        $userId = $request->get('user');
+        $code = $request->get('code');
+
+        // check for missing values
+        if (!$userId || !$code) {
+            return $this->app->json(
+              ["error" => "MissingValues"],
+              400
+            );
+        }
+
+        // check if user id and code are correct
+        $user = $this->entityManager->find(Entity\User::class, $userId);
+
+        if (!$user || $user->getActivationCode() !== $code) {
+            return $this->app->json(
+              ["error" => "Invalid"],
+              400
+            );
+        }
+
+        // activate the user
+        $user->setActivated(true);
+        $user->setActivationCode(null);
+
+        return $this->app->json(
+          ["success" => true],
           200
         );
     }

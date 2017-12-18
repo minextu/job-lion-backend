@@ -214,6 +214,42 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertNotEmpty($answer['token']);
     }
 
+    public function testUserCanNotBeLoggedInWhenNotActivated()
+    {
+        // create test user, to login with
+        $email = "test@example.com";
+        $password = "abc123";
+
+        // set activated to false
+        $this->createTestUser($email, $password, false);
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'POST',
+          '/v1/auth/login',
+          array(
+            "email" => $email,
+            "password" => $password)
+      );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          401,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("NotActivated", $answer['error'], "got wrong error");
+    }
+
     public function testUserCanBeNotBeLoggedInWithWrongPassword()
     {
         // create test user, to login with
@@ -390,5 +426,122 @@ class AuthTest extends AbstractJobLionApiTest
 
         // check error text
         $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
+    }
+
+    /**
+     * Activate tests
+     */
+    public function testUserCanBeActivated()
+    {
+        // create test user, to login with
+        $email = "test@example.com";
+        $password = "abc123";
+
+        // set activated to false
+        $user = $this->createTestUser($email, $password, false);
+        ConfirmationMail::accountActivation($user, true);
+
+        // send request to activate user
+        $code = $user->getActivationCode();
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/auth/activate',
+          array(
+            "user" => $user->getId(),
+            "code" => $code)
+      );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+            200,
+            $client->getResponse()->getStatusCode(),
+            "error: $error, message: $errorMessage"
+        );
+
+        // check if user is not activated
+        $this->assertTrue($user->getActivated());
+    }
+
+    public function testUserCanNotBeActivatedWithWrongCode()
+    {
+        // create test user, to login with
+        $email = "test@example.com";
+        $password = "abc123";
+
+        // set activated to false
+        $user = $this->createTestUser($email, $password, false);
+        ConfirmationMail::accountActivation($user, true);
+
+        // send request to activate user
+        $code = "wrong";
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/auth/activate',
+          array(
+            "user" => $user->getId(),
+            "code" => $code)
+      );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          400,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("Invalid", $answer['error'], "got wrong error");
+    }
+
+    public function testUserCanNotBeActivatedWithWrongUserId()
+    {
+        // create test user, to login with
+        $email = "test@example.com";
+        $password = "abc123";
+
+        // set activated to false
+        $user = $this->createTestUser($email, $password, false);
+        ConfirmationMail::accountActivation($user, true);
+
+        // send request to activate user
+        $code = $user->getActivationCode();
+        $client = $this->createClient();
+        $crawler = $client->request(
+          'GET',
+          '/v1/auth/activate',
+          array(
+            "user" => 9999,
+            "code" => $code)
+      );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          400,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("Invalid", $answer['error'], "got wrong error");
     }
 }

@@ -27,6 +27,8 @@ abstract class AbstractJobLionApiTest extends WebTestCase
     {
         $app = AppBundle::init($this->getEntityManager(), self::$configFile);
         $app['debug'] = true;
+        $app['isTest'] = true;
+        $_SERVER['SERVER_NAME'] = "phpunit.text.example.com";
 
         unset($app['exception_handler']);
         return $app;
@@ -126,7 +128,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      *
      * @return Entity\User   The newly created user
      */
-    protected function createTestUser($email="test@example.com", $password="abc123") : Entity\User
+    protected function createTestUser($email="test@example.com", $password="abc123", $activated=true) : Entity\User
     {
         $user = new Entity\User();
 
@@ -138,7 +140,8 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         $user->setEmail($email)
              ->setFirstName($firstName)
              ->setLastName($lastName)
-             ->setHash(Password::hash($password));
+             ->setHash(Password::hash($password))
+             ->setActivated($activated);
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();

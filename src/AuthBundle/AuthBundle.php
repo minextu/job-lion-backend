@@ -24,5 +24,6 @@ class AuthBundle
         $app->post('/v1/auth/register', "auth.controller:register");
         $app->post('/v1/auth/login', "auth.controller:login");
         $app->get('/v1/auth/info', "auth.controller:info");
+        $app->get('/v1/auth/activate', "auth.controller:activate");
     }
 }

@@ -52,6 +52,7 @@ class AppBundle
         $app = new Silex();
         $app->register(new ServiceControllerServiceProvider());
         $app['debug'] = $configFile->get('isDebug');
+        $app['isTest'] = false;
 
         // support json requests
         $app->before(function (Request $request) {
