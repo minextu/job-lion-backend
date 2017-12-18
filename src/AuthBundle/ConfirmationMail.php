@@ -20,6 +20,10 @@ class ConfirmationMail
         if (!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
             throw new Exception("E-Mail is not valid");
         }
+        // user id check
+        if (!$user->getId()) {
+            throw new Exception("User has not been saved to database, yet");
+        }
 
         // generate a random code
         $code = self::generateRandomCode();

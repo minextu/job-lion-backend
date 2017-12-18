@@ -465,8 +465,9 @@ class AuthTest extends AbstractJobLionApiTest
             "error: $error, message: $errorMessage"
         );
 
-        // check if user is not activated
+        // check if user is activated
         $this->assertTrue($user->getActivated());
+        $this->assertEmpty($user->getActivationCode(), "Activation Code should be removed");
     }
 
     public function testUserCanNotBeActivatedWithWrongCode()

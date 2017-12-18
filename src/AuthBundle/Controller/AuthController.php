@@ -95,6 +95,7 @@ class AuthController extends AbstractController
 
 
         $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         // generate and send confirmation code
         ConfirmationMail::accountActivation($user, $this->app['isTest']);
@@ -266,6 +267,7 @@ class AuthController extends AbstractController
         // activate the user
         $user->setActivated(true);
         $user->setActivationCode(null);
+        $this->entityManager->flush();
 
         return $this->app->json(
           ["success" => true],
