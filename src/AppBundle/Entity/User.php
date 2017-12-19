@@ -1,5 +1,8 @@
 <?php namespace JobLion\AppBundle\Entity;
 
+use JobLion\ExperienceReportBundle\Entity\ExperienceReport;
+use JobLion\CommentBundle\Entity\Comment;
+
 /**
  * User database entity
  *
@@ -78,6 +81,13 @@ class User
     * @OneToMany(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", mappedBy="user")
     **/
     private $submittedExperienceReports = null;
+
+    /**
+    * @var Comment[] Comments that this user has written
+    *
+    * @OneToMany(targetEntity="JobLion\CommentBundle\Entity\Comment", mappedBy="user")
+    **/
+    private $writtenComments = null;
 
     public function __construct()
     {

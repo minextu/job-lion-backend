@@ -46,6 +46,14 @@ class ExperienceReport
     private $jobCategories = null;
 
     /**
+     * Comments for this report
+     * @var Comment[]
+     *
+     * @OneToMany(targetEntity="JobLion\CommentBundle\Entity\Comment", mappedBy="experienceReport")
+     */
+    private $comments = null;
+
+    /**
      * @var \DateTime
      *
      * @Column(type="datetime", nullable=false)

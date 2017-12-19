@@ -21,7 +21,8 @@ class AppBundle
     public static $enabledBundles = [
       "AppBundle",
       "AuthBundle",
-      "ExperienceReportBundle"
+      "ExperienceReportBundle",
+      "CommentBundle"
     ];
 
     /**

@@ -104,7 +104,7 @@ class ExperienceReportController extends AbstractController
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
-     * @apiParam {String} [jobCategoryId]      Id of job category to show reports for (empty to show reports for all categories)
+     * @apiParam {Number} [jobCategoryId]      Id of job category to show reports for (empty to show reports for all categories)
      * @apiParam {Number} [offset=0]           Number of reports to skip
      * @apiParam {Number} [limit=0]            Number of reports to show (0 for all)
      *
@@ -115,6 +115,7 @@ class ExperienceReportController extends AbstractController
      *             {
      *               "id": Number,
      *               "title": String,
+     *               "text": String,
      *               "user": {
      *                 "id": Number,
      *                 "email": String,
@@ -171,6 +172,7 @@ class ExperienceReportController extends AbstractController
      *         {
      *           "id": Number,
      *           "title": String,
+     *           "text": String,
      *           "user": {
      *             "id": Number,
      *             "email": String,
@@ -182,7 +184,7 @@ class ExperienceReportController extends AbstractController
      */
 
     /**
-     * Get experience report with given id
+     * Get the experience report with the given id
      * @param  Request $request Info about this request
      * @param  int     $id      Id of report
      * @return JsonResponse     Response in json format

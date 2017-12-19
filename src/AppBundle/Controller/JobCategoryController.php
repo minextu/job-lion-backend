@@ -156,7 +156,7 @@ class JobCategoryController extends AbstractController
      */
 
     /**
-     * Return job given job category
+     * Return the given job category
      * @param  Request $request Info about this request
      * @param  int     $id      Job Category id
      * @return JsonResponse     Response in json format
