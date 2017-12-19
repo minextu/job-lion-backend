@@ -24,7 +24,7 @@ class CommentController extends AbstractController
      * @apiSuccess {bool} success           Status of the creation
      *
      * @apiError        MissingValues       Some values weren't transmited
-     * @apiError        InvalidId           Experience Eeport id does not exist
+     * @apiError        InvalidId           Experience Report id does not exist
      *
      * @apiUse Login
      * @apiErrorExample Error-Response:
@@ -95,8 +95,8 @@ class CommentController extends AbstractController
      * @apiGroup   Comment
      *
      * @apiParam {Number} id                   Experience Report id
-     * @apiParam {Number} [offset=0]           Number of reports to skip
-     * @apiParam {Number} [limit=0]            Number of reports to show (0 for all)
+     * @apiParam {Number} [offset=0]           Number of entries to skip
+     * @apiParam {Number} [limit=0]            Number of entries to show (0 for all)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
