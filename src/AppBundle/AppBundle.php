@@ -94,6 +94,7 @@ class AppBundle
           $entityFolders,
           $configFile->get('isDebug')
         );
+        $entityConfig->setAutoGenerateProxyClasses(true);
 
         // database configuration
         $prefix = $isTest ? "testDb" : "db";
