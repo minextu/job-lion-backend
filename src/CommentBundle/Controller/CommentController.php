@@ -13,7 +13,7 @@ use JobLion\CommentBundle\Entity\Comment;
 class CommentController extends AbstractController
 {
     /**
-     * @api        {post} /v1/experienceReport/:id/comments create
+     * @api        {post} /v1/experienceReports/:id/comments create
      * @apiName    createComment
      * @apiVersion 0.1.0
      * @apiGroup   Comment
@@ -89,7 +89,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @api        {get} /v1/experienceReport/:id/comments list
+     * @api        {get} /v1/experienceReports/:id/comments list
      * @apiName    listComments
      * @apiVersion 0.1.0
      * @apiGroup   Comment

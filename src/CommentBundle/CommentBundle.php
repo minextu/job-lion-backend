@@ -21,7 +21,7 @@ class CommentBundle
             return new Controller\CommentController($entityManager, $app, $config);
         };
 
-        $app->post('/v1/experienceReport/{experienceReportId}/comments', "comment.controller:create");
-        $app->get('/v1/experienceReport/{experienceReportId}/comments', "comment.controller:list");
+        $app->post('/v1/experienceReports/{experienceReportId}/comments', "comment.controller:create");
+        $app->get('/v1/experienceReports/{experienceReportId}/comments', "comment.controller:list");
     }
 }

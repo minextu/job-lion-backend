@@ -30,7 +30,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          "/v1/experienceReport/" . $report->getId() . "/comments",
+          "/v1/experienceReports/" . $report->getId() . "/comments",
           array(
             'text' => $text,
             'jwt' => $token
@@ -75,7 +75,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          "/v1/experienceReport/" . $report->getId() . "/comments",
+          "/v1/experienceReports/" . $report->getId() . "/comments",
           array(
             'jwt' => $token
           )
@@ -111,7 +111,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          "/v1/experienceReport/999/comments",
+          "/v1/experienceReports/999/comments",
           array(
             'text' => $text,
             'jwt' => $token
@@ -147,7 +147,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
           'POST',
-          "/v1/experienceReport/" . $report->getId() . "/comments",
+          "/v1/experienceReports/" . $report->getId() . "/comments",
           array(
             'text' => $text
           )
@@ -188,7 +188,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
             $client = $this->createClient();
             $crawler = $client->request(
                'POST',
-               "/v1/experienceReport/" . $report->getId() . "/comments",
+               "/v1/experienceReports/" . $report->getId() . "/comments",
                array(
                  'text' => "Comment $i",
                  'jwt' => $token
@@ -208,7 +208,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'GET',
-            '/v1/experienceReport/' . $report->getId() . '/comments'
+            '/v1/experienceReports/' . $report->getId() . '/comments'
           );
 
         // decode answer
@@ -244,7 +244,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         $client = $this->createClient();
         $crawler = $client->request(
             'GET',
-            '/v1/experienceReport/' . $report->getId() . '/comments',
+            '/v1/experienceReports/' . $report->getId() . '/comments',
             array(
               'limit' => 1,
               'offset' => 1
