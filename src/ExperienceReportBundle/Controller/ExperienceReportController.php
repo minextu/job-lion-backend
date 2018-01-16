@@ -104,14 +104,14 @@ class ExperienceReportController extends AbstractController
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
-     * @apiParam {Number} [jobCategoryId]      Id of job category to show reports for (empty to show reports for all categories)
+     * @apiParam {Number} [jobCategoryIds]     Ids of job category to show reports for (empty to show reports for all categories)
      * @apiParam {Number} [offset=0]           Number of entries to skip
      * @apiParam {Number} [limit=0]            Number of entries to show (0 for all)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *         [
+     *         reports: [
      *             {
      *               "id": Number,
      *               "title": String,
@@ -124,7 +124,8 @@ class ExperienceReportController extends AbstractController
      *               },
      *               "created": String
      *             }
-     *         ]
+     *         ],
+     *         total: Number
      */
 
     /**
@@ -134,15 +135,23 @@ class ExperienceReportController extends AbstractController
      */
     public function list(Request $request) : JsonResponse
     {
-        $jobCategoryId = $request->get('jobCategoryId');
+        $jobCategoryIds = $request->get('jobCategoryIds');
         $offset = $request->get('offset');
         $limit = $request->get('limit');
+
+        // allow comma separated list
+        if (!empty($jobCategoryIds) && !is_array($jobCategoryIds)) {
+            $jobCategoryIds = explode(',', $jobCategoryIds);
+        }
 
         // get all experience reports
 
         $experienceReports = $this->entityManager
                                 ->getRepository(Entity\ExperienceReport::class)
-                                ->findByJobCategory($jobCategoryId, $offset, $limit);
+                                ->findByJobCategories($jobCategoryIds, $offset, $limit);
+        $total = $this->entityManager
+                                ->getRepository(Entity\ExperienceReport::class)
+                                ->countByJobCategories($jobCategoryIds);
 
         // get info array
         array_walk($experienceReports, function (&$value, &$key) {
@@ -151,7 +160,10 @@ class ExperienceReportController extends AbstractController
 
         // return all categories
         return $this->app->json(
-          $experienceReports,
+          [
+            "reports" => $experienceReports,
+            "total" => $total
+          ],
           200
         );
     }

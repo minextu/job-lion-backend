@@ -7,12 +7,12 @@ use JobLion\ExperienceReportBundle\Entity\ExperienceReport;
 class ExperienceReportRepository extends EntityRepository
 {
     /**
-     * @param  mixed $jobCategoryId
+     * @param  mixed $jobCategoryIds
      * @param  integer $offset
      * @param  integer $limit
      * @return ExperienceReport[]
      */
-    public function findByJobCategory($jobCategoryId=false, $offset=0, $limit=0)
+    public function findByJobCategories($jobCategoryIds=false, $offset=0, $limit=0)
     {
         if ($limit <= 0) {
             $limit = null;
@@ -26,12 +26,34 @@ class ExperienceReportRepository extends EntityRepository
                     ->setMaxResults($limit);
 
         // only get reports by job category, if specified
-        if (!empty($jobCategoryId)) {
+        if (!empty($jobCategoryIds)) {
             $query
-                ->andWhere(':category MEMBER OF e.jobCategories')
-                ->setParameter('category', $jobCategoryId);
+                ->innerJoin('e.jobCategories', 'cat')
+                ->where('cat IN (:categories)')
+                ->setParameter('categories', $jobCategoryIds);
         }
 
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * @param  mixed $jobCategoryIds
+     * @return ExperienceReport[]
+     */
+    public function countByJobCategories($jobCategoryIds=false)
+    {
+        $query = $this->createQueryBuilder('e')
+                      ->select('count(e.id)');
+
+        // only get reports by job category, if specified
+        if (!empty($jobCategoryIds)) {
+            $query
+                ->innerJoin('e.jobCategories', 'cat')
+                ->where('cat IN (:categories)')
+                ->setParameter('categories', $jobCategoryIds);
+        }
+
+        return $query->getQuery()->getSingleScalarResult();
+        ;
     }
 }

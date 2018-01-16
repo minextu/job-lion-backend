@@ -364,8 +364,9 @@ class ExperienceReportTest extends AbstractJobLionApiTest
          );
 
         // check response
-        $experienceReports = $answer;
+        $experienceReports = $answer['reports'];
         $this->assertCount(3, $experienceReports, "Three reports were created, so there should be 3 entries in the array");
+        $this->assertEquals(3, $answer['total'], "Three reports were created, so total should also be 3");
 
         foreach ($experienceReports as $i => $report) {
             $this->assertEquals($i+1, $report['id'], "Id is not valid");
@@ -386,7 +387,7 @@ class ExperienceReportTest extends AbstractJobLionApiTest
            'GET',
            '/v1/experienceReports/',
            array(
-             'jobCategoryId' => 1,
+             'jobCategoryIds' => 1,
              'limit' => 1,
              'offset' => 1
            )
@@ -406,8 +407,9 @@ class ExperienceReportTest extends AbstractJobLionApiTest
          );
 
         // check response
-        $experienceReports = $answer;
+        $experienceReports = $answer['reports'];
         $this->assertCount(1, $experienceReports, "Only one report matches the criteria, so there should be one entry in the array");
+        $this->assertEquals(3, $answer['total'], "Three reports were created, so total should also be 3");
 
         $report = $experienceReports[0];
         $this->assertEquals(4, $report['id'], "Id is not valid");
