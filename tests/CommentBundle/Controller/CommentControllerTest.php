@@ -50,8 +50,8 @@ class CommentControllerTest extends AbstractJobLionApiTest
           "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // get id
+        $id = $answer['id'];
 
         // check if comment is in database
         $comment = $this->getEntityManager()
@@ -61,7 +61,7 @@ class CommentControllerTest extends AbstractJobLionApiTest
         // check if values were saved correctly
         $this->assertEquals($text, $comment->getText());
         $this->assertEquals($user->getId(), $comment->getUser()->getId());
-        $this->assertEquals(1, $comment->getExperienceReport()->getId());
+        $this->assertEquals($id, $comment->getExperienceReport()->getId());
     }
 
     public function testCommentCanNotBeCreatedWithoutText()

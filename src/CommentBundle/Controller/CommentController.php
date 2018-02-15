@@ -21,7 +21,7 @@ class CommentController extends AbstractController
      * @apiParam {Number} id                Experience Report id
      * @apiParam {String} text              Report text
      *
-     * @apiSuccess {bool} success           Status of the creation
+     * @apiSuccess {Number} id              Id of the newly created comment
      *
      * @apiError        MissingValues       Some values weren't transmited
      * @apiError        InvalidId           Experience Report id does not exist
@@ -78,7 +78,7 @@ class CommentController extends AbstractController
         $this->entityManager->flush();
 
         // return success
-        $response = new JsonResponse(["success" => true], 201);
+        $response = new JsonResponse(["id" => $comment->getId()], 201);
         $url = $this->generateUrl(
           "experienceReport/$experienceReportId/comment",
           $comment->getId()

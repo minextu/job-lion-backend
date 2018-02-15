@@ -37,13 +37,13 @@ class AuthTest extends AbstractJobLionApiTest
 
         // check return code
         $this->assertEquals(
-            200,
+            201,
             $client->getResponse()->getStatusCode(),
             "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // get id
+        $id = $answer['id'];
 
         // check if user is in database
         $user = $this->getEntityManager()
@@ -52,6 +52,7 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertTrue($user == true, "User is not in Database");
 
         // check if values were saved correctly
+        $this->assertEquals($id, $user->getId());
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($firstName, $user->getFirstName());
         $this->assertEquals($lastName, $user->getLastName());

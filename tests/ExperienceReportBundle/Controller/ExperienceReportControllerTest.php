@@ -59,12 +59,12 @@ class ExperienceReportTest extends AbstractJobLionApiTest
           "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // get the id
+        $id = $answer['id'];
 
         // check if report is in database
         $report = $this->getEntityManager()
-                          ->find(Entity\ExperienceReport::class, 1);
+                          ->find(Entity\ExperienceReport::class, $id);
         $this->assertTrue($report == true, "Report is not in Database");
 
         // check if values were saved correctly

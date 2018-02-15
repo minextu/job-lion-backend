@@ -18,7 +18,7 @@ class JobCategoryController extends AbstractController
      *
      * @apiParam {String} name           Name of Job Category
      *
-     * @apiSuccess {bool} success        Status of the creation
+     * @apiSuccess {Number} id           Id of the newly created category
      *
      * @apiError        MissingValues    Some values weren't transmited
      * @apiError        CategoryExists   A job category with this name already exists
@@ -74,7 +74,7 @@ class JobCategoryController extends AbstractController
         $this->entityManager->flush();
 
         // return success
-        $response = new JsonResponse(["success" => true], 201);
+        $response = new JsonResponse(["id" => $jobCategory->getId()], 201);
         $url = $this->generateUrl('jobCategories', $jobCategory->getId());
         $response->headers->set('Location', $url);
 

@@ -26,7 +26,7 @@ class AuthController extends AbstractController
      * @apiParam {String} lastName            User last name
      * @apiParam {String} password            User password
      *
-     * @apiSuccess {bool} success             Status of the user creation
+     * @apiSuccess {Number} id                Id of the newly created User
      *
      * @apiError        MissingValues         Some values weren't transmited
      * @apiError        InvalidEmail          E-Mail is invalid
@@ -101,11 +101,15 @@ class AuthController extends AbstractController
         ConfirmationMail::accountActivation($user, $this->app['isTest']);
         $this->entityManager->flush();
 
-        // return success
-        return $this->app->json(
-          ["success" => true],
-          200
+        // return success TODO: update to correct api url (if changed)
+        $response = new JsonResponse(["id" => $user->getId()], 201);
+        $url = $this->generateUrl(
+          "user",
+          $user->getId()
         );
+        $response->headers->set('Location', $url);
+
+        return $response;
     }
 
     /**

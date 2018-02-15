@@ -41,8 +41,8 @@ class JobCategoryTest extends AbstractJobLionApiTest
           "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // get id
+        $id = $answer['id'];
 
         // check if job category is in database
         $jobCategory = $this->getEntityManager()
@@ -52,7 +52,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
 
         // check if values were saved correctly
         $this->assertEquals($name, $jobCategory->getName());
-        $this->assertEquals(1, $jobCategory->getUser()->getId());
+        $this->assertEquals($id, $jobCategory->getUser()->getId());
     }
 
     public function testJobCategoryCanBeCreatedUsingJson()
@@ -90,8 +90,8 @@ class JobCategoryTest extends AbstractJobLionApiTest
           "error: $error, message: $errorMessage"
         );
 
-        // check success answer
-        $this->assertTrue($answer['success']);
+        // get id
+        $id = $answer['id'];
 
         // check if job category is in database
         $jobCategory = $this->getEntityManager()
@@ -101,7 +101,7 @@ class JobCategoryTest extends AbstractJobLionApiTest
 
         // check if values were saved correctly
         $this->assertEquals($name, $jobCategory->getName());
-        $this->assertEquals(1, $jobCategory->getUser()->getId());
+        $this->assertEquals($id, $jobCategory->getUser()->getId());
     }
 
     public function testJobCategoryWithMissingValuesThrowsError()

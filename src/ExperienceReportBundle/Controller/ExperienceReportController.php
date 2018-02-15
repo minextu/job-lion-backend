@@ -21,7 +21,7 @@ class ExperienceReportController extends AbstractController
      * @apiParam {String} text              Report text
      * @apiParam {String[]} jobCategoryIds  Job Category Ids
      *
-     * @apiSuccess {bool} success           Status of the creation
+     * @apiSuccess {Number} id              Id of the newly created report
      *
      * @apiError        MissingValues       Some values weren't transmited
      * @apiError        InvalidCategory     Job Category id does not exist
@@ -91,7 +91,7 @@ class ExperienceReportController extends AbstractController
         $this->entityManager->flush();
 
         // return success
-        $response = new JsonResponse(["success" => true], 201);
+        $response = new JsonResponse(["id" => $report->getId()], 201);
         $url = $this->generateUrl('experienceReports', $report->getId());
         $response->headers->set('Location', $url);
 
