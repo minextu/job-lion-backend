@@ -51,9 +51,9 @@ class Token
      * Generate login token from user object
      * @param  User   $user           User to generate token for
      * @param  int    $validSeconds   Amount of seconds this token is valid
-     * @return String                 Generated token
+     * @return array                  Array containing the generated token and it's data
      */
-    public function generate(User $user, $validSeconds=60*60*24) : String
+    public function generate(User $user, $validSeconds=60*60*24) : array
     {
         $tokenId    = base64_encode(random_bytes(32));
         $issuedAt   = time();
@@ -76,7 +76,7 @@ class Token
         // encode token using the secret key
         $token = JWT::encode($data, $this->key, 'HS512');
 
-        return $token;
+        return ['token' => $token, 'data' => $data];
     }
 
     /**

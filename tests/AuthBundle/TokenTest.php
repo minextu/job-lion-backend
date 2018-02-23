@@ -13,7 +13,7 @@ class TokenTest extends AbstractJobLionApiTest
 
         // generate login token for user
         $token = new Token($this->getConfigFile(), $this->getEntityManager());
-        $tokenString = $token->generate($testUser);
+        $tokenString = $token->generate($testUser)['token'];
 
         // get user from token
         $user = $token->getUser($tokenString);
@@ -33,7 +33,7 @@ class TokenTest extends AbstractJobLionApiTest
 
         // generate login token for user
         $token = new Token($this->getConfigFile(), $this->getEntityManager());
-        $tokenString = $token->generate($testUser);
+        $tokenString = $token->generate($testUser)['token'];
 
         // change token
         $tokenString[4] = "%";
@@ -51,7 +51,7 @@ class TokenTest extends AbstractJobLionApiTest
 
         // generate login token that's invalid since 1 second
         $token = new Token($this->getConfigFile(), $this->getEntityManager());
-        $tokenString = $token->generate($testUser, -1);
+        $tokenString = $token->generate($testUser, -1)['token'];
 
         // try to get user from token (should throw exception)
         $user = $token->getUser($tokenString);
