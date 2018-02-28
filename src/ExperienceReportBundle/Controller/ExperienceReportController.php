@@ -3,6 +3,7 @@
 use JobLion\AppBundle\Controller\AbstractController;
 use JobLion\ExperienceReportBundle\Entity;
 use JobLion\AppBundle;
+use JobLion\CompanyBundle\Entity\Company;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -19,13 +20,14 @@ class ExperienceReportController extends AbstractController
      *
      * @apiParam {String} title             Title of report
      * @apiParam {String} text              Report text
-     * @apiParam {String[]} jobCategoryIds  Job Category Ids
+     * @apiParam {Number[]} jobCategoryIds  Job Category Ids
+     * @apiParam {Number} [companyId]       Id of company this report is associated with
      *
      * @apiSuccess {Number} id              Id of the newly created report
      *
      * @apiError        MissingValues       Some values weren't transmited
      * @apiError        InvalidCategory     Job Category id does not exist
-     * @apiError        MalformedCategories jobCategoryids is not an array
+     * @apiError        InvalidCompany      companyId is invalid
      *
      * @apiUse Login
      * @apiErrorExample Error-Response:
@@ -51,6 +53,7 @@ class ExperienceReportController extends AbstractController
         $title = $request->get('title');
         $text = $request->get('text');
         $jobCategoryIds = $request->get('jobCategoryIds');
+        $companyId = $request->get('companyId');
 
         // allow comma separated list
         if (!is_array($jobCategoryIds)) {
@@ -80,11 +83,25 @@ class ExperienceReportController extends AbstractController
             }
         }
 
+        // check if companyId is valid
+        $company = null;
+        if ($companyId) {
+            $company = $this->entityManager
+                            ->find(Company::class, $companyId);
+            if (!$company) {
+                return $this->app->json(
+                  ["error" => "InvalidCompany"],
+                  400
+                );
+            }
+        }
+
         // create report
         $report = new Entity\ExperienceReport();
         $report->setTitle($title)
                ->setText($text)
                ->setJobCategories($jobCategories)
+               ->setCompany($company)
                ->setUser($this->user);
 
         $this->entityManager->persist($report);
@@ -116,6 +133,16 @@ class ExperienceReportController extends AbstractController
      *               "id": Number,
      *               "title": String,
      *               "text": String,
+     *               "jobCategories": [
+     *                   {
+     *                      "id": Number,
+     *                      "name": String,
+     *                   }
+     *               ],
+     *               "company": {
+     *                 "id": Number,
+     *                 "title": String
+     *               },
      *               "user": {
      *                 "id": Number,
      *                 "email": String,

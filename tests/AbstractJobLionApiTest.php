@@ -12,6 +12,7 @@ use JobLion\AuthBundle\Password;
 use JobLion\AppBundle\Entity\User;
 use JobLion\AppBundle\Entity\JobCategory;
 use JobLion\ExperienceReportBundle\Entity\ExperienceReport;
+use JobLion\CompanyBundle\Entity\Company;
 
 abstract class AbstractJobLionApiTest extends WebTestCase
 {
@@ -224,5 +225,33 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         $this->getEntityManager()->flush();
 
         return $report;
+    }
+
+    /**
+     * Create a test company
+     * @return Company
+     */
+    protected function createTestCompany($name="Test Company") : Company
+    {
+        // create and login test user
+        $email = "companyTest@example.com";
+        $user = $this->getEntityManager()
+                     ->getRepository(User::class)
+                     ->findOneBy(array('email' => $email));
+
+        if (!$user) {
+            $user = $this->createTestUser($email);
+        }
+        $token = $this->loginTestUser($email);
+
+        // create test company
+        $company = new Company();
+        $company->setTitle($name)
+                ->setUser($user);
+
+        $this->getEntityManager()->persist($company);
+        $this->getEntityManager()->flush();
+
+        return $company;
     }
 }

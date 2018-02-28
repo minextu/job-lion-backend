@@ -1,5 +1,8 @@
 <?php namespace JobLion\CompanyBundle\Entity;
 
+use JobLion\AppBundle\Entity\User;
+use JobLion\CompanyBundle\Entity\Company;
+
 /**
  * Job Category database entity
  *
@@ -29,6 +32,14 @@ class Company
      * @ManyToOne(targetEntity="JobLion\AppBundle\Entity\User", inversedBy="addedCompanies")
      */
     private $user;
+
+    /**
+     * Experience Reports associated with this company
+     * @var Company
+     *
+     * @ManyToOne(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", inversedBy="company")
+     */
+    private $experienceReports;
 
     /**
      * @var \DateTime

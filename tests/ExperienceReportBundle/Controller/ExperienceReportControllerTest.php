@@ -22,6 +22,9 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
             $categoryIds[] = $category->getId();
         }
 
+        // create a test company
+        $company = $this->createTestCompany();
+
         $title = "Test Report";
         $text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                  Vestibulum eget ante viverra,
@@ -40,6 +43,7 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
           '/v1/experienceReports/',
           array(
             'jobCategoryIds' => $categoryIds,
+            'companyId' => $company->getId(),
             'title' => $title,
             'text' => $text,
             'jwt' => $token
@@ -68,15 +72,17 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
         $this->assertTrue($report == true, "Report is not in Database");
 
         // check if values were saved correctly
-        $this->assertEquals($title, $report->getTitle());
-        $this->assertEquals($text, $report->getText());
-        $this->assertEquals($user->getId(), $report->getUser()->getId());
+        $this->assertEquals($title, $report->getTitle(), "Title is invalid");
+        $this->assertEquals($text, $report->getText(), "Text is invalid");
+        $this->assertEquals($user->getId(), $report->getUser()->getId(), "User is invalid");
 
         $jobCategories = $report->getJobCategories();
         $this->assertCount(3, $jobCategories, "Three Categories were added, so there should be 3 entries in the array");
         foreach ($categoryIds as $key => $categoryId) {
             $this->assertEquals($categoryId, $jobCategories[$key]->getId());
         }
+
+        $this->assertEquals($company, $report->getCompany(), "Company is invalid");
     }
 
     public function testReportWithMissingValuesThrowsError()
@@ -301,6 +307,11 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
         $this->createTestJobCategory("Test Category 2");
         $this->createTestJobCategory("Test Category 3");
 
+        // create test companies
+        $this->createTestCompany("Test Company 1");
+        $this->createTestCompany("Test Company 2");
+        $this->createTestCompany("Test Company 3");
+
         // create and login test user
         $user = $this->createTestUser();
         $token = $this->loginTestUser();
@@ -314,6 +325,7 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
               array(
                 'title' => "Report $i",
                 'jobCategoryIds' => [$i],
+                'companyId' => $i,
                 'text' => "Report text $i",
                 'jwt' => $token
               )
@@ -371,6 +383,7 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
         foreach ($experienceReports as $i => $report) {
             $this->assertEquals($i+1, $report['id'], "Id is not valid");
             $this->assertEquals("Report " . ($i+1), $report['title'], "Title is not valid");
+            $this->assertEquals("Test Company " . ($i+1), $report['company']['title'], "Company is not valid");
             $this->assertEquals($user->toArray(), $report['user'], "User is not valid");
             $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
             $this->assertEquals($i+1, $report['jobCategories'][0]['id'], "Job category is not valid");

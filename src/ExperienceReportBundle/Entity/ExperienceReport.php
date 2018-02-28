@@ -1,5 +1,10 @@
 <?php namespace JobLion\ExperienceReportBundle\Entity;
 
+use JobLion\AppBundle\Entity\User;
+use JobLion\AppBundle\Entity\JobCategory;
+use JobLion\CommentBundle\Entity\Comment;
+use JobLion\CompanyBundle\Entity\Company;
+
 /**
  * Experience Report database entity
  *
@@ -52,6 +57,14 @@ class ExperienceReport
      * @OneToMany(targetEntity="JobLion\CommentBundle\Entity\Comment", mappedBy="experienceReport")
      */
     private $comments = null;
+
+    /**
+     * Company this report is associated with
+     * @var Company
+     *
+     * @ManyToOne(targetEntity="JobLion\CompanyBundle\Entity\Company", inversedBy="experienceReports")
+     */
+    private $company;
 
     /**
      * @var \DateTime
@@ -154,6 +167,24 @@ class ExperienceReport
     }
 
     /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     * @return ExperienceReport
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+        return $this;
+    }
+
+    /**
       * Convert object to info array
       * @return array info array
       */
@@ -170,6 +201,7 @@ class ExperienceReport
           "title" => $this->getTitle(),
           "text" => $this->getText(),
           "jobCategories" => $categoryArray,
+          "company" => $this->getCompany() ? $this->getCompany()->toArray() : null,
           "user" => $this->getUser()->toArray(),
           "created" => $this->getCreated()->format(\DateTime::ATOM)
       ];
