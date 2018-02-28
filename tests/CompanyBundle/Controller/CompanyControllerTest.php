@@ -174,7 +174,7 @@ class CompanyControllerTest extends AbstractJobLionApiTest
         // check response
         $companies = $answer['companies'];
         $this->assertCount(3, $companies, "Three companies were created, so there should be 3 entries in the array");
-        //$this->assertEquals(3, $answer['total'], "Three companies were created, so total should also be 3");
+        $this->assertEquals(3, $answer['total'], "Three companies were created, so total should also be 3");
 
         foreach ($companies as $i => $company) {
             $this->assertEquals($i+1, $company['id'], "Id is not valid");
@@ -214,7 +214,7 @@ class CompanyControllerTest extends AbstractJobLionApiTest
         // check response
         $companies = $answer['companies'];
         $this->assertCount(1, $companies, "Only one company matches the criteria, so there should be one entry in the array");
-        //$this->assertEquals(3, $companies['total'], "Three companies were created, so total should be 3");
+        $this->assertEquals(3, $answer['total'], "Three companies were created, so total should be 3");
 
         $company = $companies[0];
         $this->assertEquals(2, $company['id'], "Id is not valid");

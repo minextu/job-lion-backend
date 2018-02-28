@@ -2,13 +2,14 @@
 
 use Doctrine\ORM\EntityRepository;
 use JobLion\Company\Entity\Company;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CompanyRepository extends EntityRepository
 {
     /**
      * @param  integer $offset
      * @param  integer $limit
-     * @return Company[]
+     * @return Paginator
      */
     public function findAll($offset=0, $limit=0)
     {
@@ -23,6 +24,6 @@ class CompanyRepository extends EntityRepository
                     ->setFirstResult($offset)
                     ->setMaxResults($limit);
 
-        return $query->getQuery()->getResult();
+        return new Paginator($query, $fetchJoinCollection = false);
     }
 }

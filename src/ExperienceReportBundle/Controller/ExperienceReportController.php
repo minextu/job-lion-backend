@@ -150,19 +150,20 @@ class ExperienceReportController extends AbstractController
         $experienceReports = $this->entityManager
                                 ->getRepository(Entity\ExperienceReport::class)
                                 ->findByJobCategories($jobCategoryIds, $offset, $limit);
-        $total = $this->entityManager
-                                ->getRepository(Entity\ExperienceReport::class)
-                                ->countByJobCategories($jobCategoryIds);
+
+        // get total
+        $total = count($experienceReports);
 
         // get info array
-        array_walk($experienceReports, function (&$value, &$key) {
-            $value = $value->toArray(true);
-        });
+        $reportInfos = [];
+        foreach ($experienceReports as $report) {
+            $reportInfos[] = $report->toArray();
+        }
 
         // return all categories
         return $this->app->json(
           [
-            "reports" => $experienceReports,
+            "reports" => $reportInfos,
             "total" => $total
           ],
           200

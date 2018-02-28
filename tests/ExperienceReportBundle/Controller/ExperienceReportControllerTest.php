@@ -328,7 +328,7 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
                   '/v1/experienceReports/',
                   array(
                     'title' => "Report $i",
-                    'jobCategoryIds' => [1],
+                    'jobCategoryIds' => [1, 2],
                     'text' => "Report text $i",
                     'jwt' => $token
                   )
@@ -415,9 +415,42 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
         $this->assertEquals(4, $report['id'], "Id is not valid");
         $this->assertEquals("Report 4", $report['title'], "Title is not valid");
         $this->assertEquals($user->toArray(), $report['user'], "User is not valid");
-        $this->assertCount(1, $report['jobCategories'], "Each report should only have one category");
         $this->assertEquals(1, $report['jobCategories'][0]['id'], "Job category is not valid");
     }
+
+    public function testReportsWithParametersGetCountedCorrectly()
+    {
+        $user = $this->createTestReports(true);
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+           'GET',
+           '/v1/experienceReports/',
+           array(
+             'jobCategoryIds' => [1, 2]
+           )
+         );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+           200,
+           $client->getResponse()->getStatusCode(),
+           "error: $error, message: $errorMessage"
+         );
+
+        // check response
+        $experienceReports = $answer['reports'];
+        $this->assertCount(4, $experienceReports, "Only 4 report matches the criteria, so there should be 4 entries in the array");
+        $this->assertEquals(4, $answer['total'], "Four reports were created, so total should also be 4");
+    }
+
 
     /**
      * Get tests

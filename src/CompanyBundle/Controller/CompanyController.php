@@ -130,15 +130,20 @@ class CompanyController extends AbstractController
                           ->getRepository(Company::class)
                           ->findAll($offset, $limit);
 
+        // get total
+        $total = count($companies);
+
         // get info array
-        array_walk($companies, function (&$value, &$key) {
-            $value = $value->toArray(true);
-        });
+        $companyInfos = [];
+        foreach ($companies as $company) {
+            $companyInfos[] = $company->toArray();
+        }
 
         // return all companies
         return $this->app->json(
           [
-            "companies" => $companies
+            "companies" => $companyInfos,
+            "total" => $total
           ],
           200
         );
