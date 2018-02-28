@@ -3,7 +3,7 @@
 use JobLion\AbstractJobLionApiTest;
 use JobLion\ExperienceReportBundle\Entity;
 
-class ExperienceReportTest extends AbstractJobLionApiTest
+class ExperienceReportControllerTest extends AbstractJobLionApiTest
 {
     /**
      * Create Tests

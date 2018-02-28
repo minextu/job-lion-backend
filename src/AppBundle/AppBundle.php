@@ -22,7 +22,8 @@ class AppBundle
       "AppBundle",
       "AuthBundle",
       "ExperienceReportBundle",
-      "CommentBundle"
+      "CommentBundle",
+      "CompanyBundle"
     ];
 
     /**

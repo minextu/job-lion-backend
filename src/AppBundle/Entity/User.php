@@ -2,6 +2,7 @@
 
 use JobLion\ExperienceReportBundle\Entity\ExperienceReport;
 use JobLion\CommentBundle\Entity\Comment;
+use JobLion\CompanyBundle\Entity\Company;
 
 /**
  * User database entity
@@ -76,11 +77,18 @@ class User
     private $addedJobCategories = null;
 
     /**
-    * @var Report[] Experince reports this user submitted
+    * @var ExperienceReport[] Experience reports this user submitted
     *
     * @OneToMany(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", mappedBy="user")
     **/
     private $submittedExperienceReports = null;
+
+    /**
+    * @var Company[] Companies this user added
+    *
+    * @OneToMany(targetEntity="JobLion\CompanyBundle\Entity\Company", mappedBy="user")
+    **/
+    private $createdCompanies = null;
 
     /**
     * @var Comment[] Comments that this user has written

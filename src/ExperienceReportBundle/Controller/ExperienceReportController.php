@@ -126,6 +126,7 @@ class ExperienceReportController extends AbstractController
      *             }
      *         ],
      *         total: Number
+     *     }
      */
 
     /**
