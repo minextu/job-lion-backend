@@ -400,7 +400,7 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
            'GET',
            '/v1/experienceReports/',
            array(
-             'jobCategoryIds' => 1,
+             'jobCategoryIds' => [1,2],
              'limit' => 1,
              'offset' => 1
            )
@@ -421,12 +421,12 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
 
         // check response
         $experienceReports = $answer['reports'];
-        $this->assertCount(1, $experienceReports, "Only one report matches the criteria, so there should be one entry in the array");
-        $this->assertEquals(3, $answer['total'], "Three reports were created, so total should also be 3");
+        $this->assertCount(1, $experienceReports, "Only one report should be returned (limit: 1)");
+        $this->assertEquals(2, $answer['total'], "Two reports match the criteria");
 
         $report = $experienceReports[0];
-        $this->assertEquals(4, $report['id'], "Id is not valid");
-        $this->assertEquals("Report 4", $report['title'], "Title is not valid");
+        $this->assertEquals(5, $report['id'], "Id is not valid");
+        $this->assertEquals("Report 5", $report['title'], "Title is not valid");
         $this->assertEquals($user->toArray(), $report['user'], "User is not valid");
         $this->assertEquals(1, $report['jobCategories'][0]['id'], "Job category is not valid");
     }
@@ -460,8 +460,8 @@ class ExperienceReportControllerTest extends AbstractJobLionApiTest
 
         // check response
         $experienceReports = $answer['reports'];
-        $this->assertCount(4, $experienceReports, "Only 4 report matches the criteria, so there should be 4 entries in the array");
-        $this->assertEquals(4, $answer['total'], "Four reports were created, so total should also be 4");
+        $this->assertCount(2, $experienceReports, "Only 2 report matches the criteria, so there should be 2 entries in the array");
+        $this->assertEquals(2, $answer['total'], "Four reports were created, so total should also be 2");
     }
 
 

@@ -22,16 +22,19 @@ class ExperienceReportRepository extends EntityRepository
             $offset = 0;
         }
 
-        $query = $this->createQueryBuilder('e')
+        $query = $this->createQueryBuilder('report')
                     ->setFirstResult($offset)
                     ->setMaxResults($limit);
 
         // only get reports by job category, if specified
         if (!empty($jobCategoryIds)) {
             $query
-                ->innerJoin('e.jobCategories', 'cat')
+                ->join('report.jobCategories', 'cat')
                 ->where('cat IN (:categories)')
-                ->setParameter('categories', $jobCategoryIds);
+                ->groupBy('report.id')
+                ->having('COUNT(cat.name) >= :categoryCount')
+                ->setParameter('categories', $jobCategoryIds)
+                ->setParameter('categoryCount', count($jobCategoryIds));
         }
 
         return new Paginator($query, $fetchJoinCollection = !empty($jobCategoryIds));

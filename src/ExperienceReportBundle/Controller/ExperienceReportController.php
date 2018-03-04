@@ -121,7 +121,7 @@ class ExperienceReportController extends AbstractController
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
-     * @apiParam {Number} [jobCategoryIds]     Ids of job category to show reports for (empty to show reports for all categories)
+     * @apiParam {Number} [jobCategoryIds]     Ids of job category the report should have (empty to show reports for all categories)
      * @apiParam {Number} [offset=0]           Number of entries to skip
      * @apiParam {Number} [limit=0]            Number of entries to show (0 for all)
      *
