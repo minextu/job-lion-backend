@@ -37,7 +37,7 @@ class Company
      * Experience Reports associated with this company
      * @var Company
      *
-     * @ManyToOne(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", inversedBy="company")
+     * @OneToMany(targetEntity="JobLion\ExperienceReportBundle\Entity\ExperienceReport", mappedBy="company")
      */
     private $experienceReports;
 

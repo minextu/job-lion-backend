@@ -88,7 +88,7 @@ class User
     *
     * @OneToMany(targetEntity="JobLion\CompanyBundle\Entity\Company", mappedBy="user")
     **/
-    private $createdCompanies = null;
+    private $addedCompanies = null;
 
     /**
     * @var Comment[] Comments that this user has written

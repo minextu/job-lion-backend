@@ -39,6 +39,7 @@ composer install
 
 # migrate database
 ./vendor/bin/doctrine-migrations migration:migrate -n
+./vendor/bin/doctrine orm:validate-schema
 
 EOSSH
 
