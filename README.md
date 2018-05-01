@@ -5,12 +5,12 @@
 
 Backend (API) for Job-Lion
 
-Documentation: 
+Documentation:
 [API](https://staging.job-lion.et.tc/api/apidoc),
 [Classes](https://staging.job-lion.et.tc/api/docs)
 
 ## Development
-You will need to setup apache, php, mysql (e.g. [xampp](https://www.apachefriends.org/index.html)) and [composer](https://getcomposer.org/). 
+You will need to setup apache, php, mysql (e.g. [xampp](https://www.apachefriends.org/index.html)) and [composer](https://getcomposer.org/).
 Then follow these steps:
 
 - Clone this repository to your server folder
@@ -31,11 +31,11 @@ composer install
 - Setup database
 
 ```
-vendor/bin/doctrine orm:schema-tool:update --dump-sql --force
+vendor/bin/doctrine-migrations migration:migrate
 ```
 
 ### Migrate database
-You should run `vendor/bin/doctrine orm:schema-tool:update --dump-sql --force` after every pull, to bring the database up to date.
+You should run `vendor/bin/doctrine-migrations migration:migrate` after every pull, to bring the database up to date.
 
 ### Unit testing (Optional)
 Install [phpunit](https://phpunit.de/manual/current/en/installation.html) and run it in the root folder.
