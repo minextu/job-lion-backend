@@ -38,7 +38,7 @@ git checkout $commit
 composer install
 
 # migrate database
-vendor/bin/doctrine orm:schema-tool:update --dump-sql --force
+./vendor/bin/doctrine-migrations migration:migrate -n
 
 EOSSH
 

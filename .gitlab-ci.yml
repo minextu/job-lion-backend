@@ -6,12 +6,23 @@ cache:
   - vendor/
 
 variables:
-  MYSQL_DATABASE:      ettc_tests
+  MYSQL_DATABASE:      joblion_tests
   MYSQL_ROOT_PASSWORD: Kaigilohgeifeph5huqu
 
 stages:
   - test
   - deploy
+
+# test migrations
+test:migrations:
+  image:               php:7.0
+  services:
+    - mariadb:10.1
+  stage:               test
+  script:
+  - bash ci/dockerInstall.sh "mysql" > /dev/null
+  - vendor/bin/doctrine-migrations migration:migrate -n
+  - vendor/bin/doctrine orm:validate-schema
 
 # slow mysql test on php 7.0 + mariadb 10.1 (debian stretch)
 test:php:7.0:mysql:
