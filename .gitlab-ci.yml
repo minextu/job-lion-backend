@@ -1,4 +1,4 @@
-image:                 php:7.0
+image:                 minextu/php-ci:7.0
 
 # Composer stores all downloaded packages in the vendor/ directory.
 cache:
@@ -15,7 +15,7 @@ stages:
 
 # test migrations
 test:migrations:
-  image:               php:7.0
+  image:               minextu/php-ci:7.0
   services:
     - mariadb:10.1
   stage:               test
@@ -26,7 +26,7 @@ test:migrations:
 
 # slow mysql test on php 7.0 + mariadb 10.1 (debian stretch)
 test:php:7.0:mysql:
-  image:               php:7.0
+  image:               minextu/php-ci:7.0
   services:
     - mariadb:10.1
   stage:               test
@@ -36,7 +36,7 @@ test:php:7.0:mysql:
 
 # fast test on php 7.0
 test:php:7.0:
-  image:               php:7.0
+  image:               minextu/php-ci:7.0
   stage:               test
   script:
   - bash ci/dockerInstall.sh > /dev/null
@@ -44,7 +44,15 @@ test:php:7.0:
 
 # fast test on php 7.1
 test:php:7.1:
-  image:               php:7.1
+  image:               minextu/php-ci:7.1
+  stage:               test
+  script:
+  - bash ci/dockerInstall.sh  > /dev/null
+  - phpunit --coverage-text --colors=never
+
+# fast test on php latest
+test:php:latest:
+  image:               minextu/php-ci:latest
   stage:               test
   script:
   - bash ci/dockerInstall.sh  > /dev/null
