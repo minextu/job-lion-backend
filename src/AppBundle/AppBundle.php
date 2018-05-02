@@ -41,6 +41,7 @@ class AppBundle
         $app->post('/v1/jobCategories/', "jobCategory.controller:create");
         $app->get('/v1/jobCategories/', "jobCategory.controller:list");
         $app->get('/v1/jobCategories/{id}', "jobCategory.controller:get");
+        $app->delete('/v1/jobCategories/{id}', "jobCategory.controller:delete");
     }
 
     /**

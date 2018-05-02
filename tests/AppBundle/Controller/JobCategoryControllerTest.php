@@ -346,4 +346,106 @@ class JobCategoryTest extends AbstractJobLionApiTest
         // check error text
         $this->assertEquals("NotFound", $answer['error'], "got wrong error");
     }
+
+    /**
+     * Delete tests
+     */
+    public function testCategoryCanBeDeleted()
+    {
+        // create and login test user
+        $user = $this->createTestUser("test@example.com", "abc123", true, true);
+        $token = $this->loginTestUser();
+
+        $this->createTestJobCategory("Test Category 1");
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/jobCategories/1',
+             array(
+               'jwt' => $token
+             )
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+             200,
+             $client->getResponse()->getStatusCode(),
+             "error: $error, message: $errorMessage"
+           );
+
+        // check if category got deleted
+        $category = $this->getEntityManager()
+                          ->find(Entity\JobCategory::class, 1);
+        $this->assertTrue($category == false, "Category is still in Database");
+    }
+
+    public function testCategoryCanNotBeDeletedWhenLoggedOut()
+    {
+        $this->createTestJobCategory("Test Category 1");
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/jobCategories/1'
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          401,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
+    }
+
+    public function testCategoryCanNotBeDeletedAsNonAdmin()
+    {
+        // create and login test user
+        $user = $this->createTestUser();
+        $token = $this->loginTestUser();
+
+        $this->createTestJobCategory("Test Category 1");
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/jobCategories/1',
+             array(
+               'jwt' => $token
+             )
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+             401,
+             $client->getResponse()->getStatusCode(),
+             "error: $error, message: $errorMessage"
+        );
+        // check error text
+        $this->assertEquals("NoPermissions", $answer['error'], "got wrong error");
+    }
 }

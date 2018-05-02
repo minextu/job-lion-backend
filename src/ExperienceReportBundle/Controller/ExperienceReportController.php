@@ -203,9 +203,9 @@ class ExperienceReportController extends AbstractController
      * @apiVersion 0.1.0
      * @apiGroup   Experience Report
      *
-     * @apiParam {Number} id        Id of job category
+     * @apiParam {Number} id        Report id
      *
-     * @apiError          NotFound  Job Category not found
+     * @apiError          NotFound  Report not found
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -247,6 +247,56 @@ class ExperienceReportController extends AbstractController
         // return report
         return $this->app->json(
           $experienceReport->toArray(),
+          200
+        );
+    }
+
+    /**
+     * @api        {delete} /v1/experienceReports/:id delete
+     * @apiName    deleteExperienceReport
+     * @apiVersion 0.1.0
+     * @apiGroup   Experience Report
+     *
+     * @apiParam {Number} id        Report id
+     *
+     * @apiError          NotFound  Report not found
+     * @apiUse Login
+     * @apiUse AdminOnly
+     *
+     */
+
+    /**
+     * delete the experience report with the given id
+     * @param  Request $request Info about this request
+     * @param  int     $id      Id of report
+     * @return JsonResponse     Response in json format
+     */
+    public function delete(Request $request, $id) : JsonResponse
+    {
+        // check for permissions
+        $error = $this->requireAdmin($request);
+        if ($error) {
+            return $error;
+        }
+
+        // get experience report with given id
+        $experienceReport = $this->entityManager
+                              ->find(Entity\ExperienceReport::class, $id);
+
+        if (!$experienceReport) {
+            return $this->app->json(
+              ["error" => "NotFound"],
+              404
+            );
+        }
+
+        // remove this report
+        $this->entityManager->remove($experienceReport);
+        $this->entityManager->flush();
+
+        // return success
+        return $this->app->json(
+          ["success" => true],
           200
         );
     }

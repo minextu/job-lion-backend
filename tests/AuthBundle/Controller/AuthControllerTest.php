@@ -186,7 +186,7 @@ class AuthTest extends AbstractJobLionApiTest
         $email = "test@example.com";
         $password = "abc123";
 
-        $this->createTestUser($email, $password);
+        $user = $this->createTestUser($email, $password);
 
         // send request
         $client = $this->createClient();
@@ -213,6 +213,15 @@ class AuthTest extends AbstractJobLionApiTest
 
         // check if token exists
         $this->assertNotEmpty($answer['token']);
+
+        // validate user
+        $this->assertNotEmpty($answer['user']);
+        $userReturn = $answer['user'];
+        $this->assertEquals($user->getId(), $userReturn['id']);
+        $this->assertEquals($user->getEmail(), $userReturn['email']);
+        $this->assertEquals($user->getFirstName(), $userReturn['firstName']);
+        $this->assertEquals($user->getLastName(), $userReturn['lastName']);
+        $this->assertFalse($userReturn['isAdmin']);
     }
 
     public function testUserCanNotBeLoggedInWhenNotActivated()
@@ -395,6 +404,48 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertEquals($email, $user['email']);
         $this->assertEquals("Test", $user['firstName']);
         $this->assertEquals("Testus", $user['lastName']);
+        $this->assertFalse($user['isAdmin']);
+    }
+
+    public function testLoginUserInfoOfAdminUser()
+    {
+        // create test user
+        $email = "test@example.com";
+        $password = "abc123";
+
+        // create admin user
+        $this->createTestUser($email, $password, true, true);
+        $token = $this->loginTestUser($email, $password);
+
+        // send request to get info
+        $client = $this->createClient();
+        $crawler = $client->request(
+           'GET',
+           '/v1/auth/info',
+           array('jwt' => $token)
+        );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+           200,
+           $client->getResponse()->getStatusCode(),
+           "error: $error, message: $errorMessage"
+        );
+
+        // check data
+        $this->assertArrayHasKey("user", $answer, "User wasn't returned");
+        $user = $answer['user'];
+        $this->assertEquals(1, $user['id']);
+        $this->assertEquals($email, $user['email']);
+        $this->assertEquals("Test", $user['firstName']);
+        $this->assertEquals("Testus", $user['lastName']);
+        $this->assertTrue($user['isAdmin']);
     }
 
     public function testLoginUserInfoThrowsErrorWhenNoLoginTokenIsProvided()

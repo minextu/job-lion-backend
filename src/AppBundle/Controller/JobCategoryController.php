@@ -180,4 +180,54 @@ class JobCategoryController extends AbstractController
           200
         );
     }
+
+    /**
+     * @api        {delete} /v1/jobCategories/:id delete
+     * @apiName    deleteJobCategory
+     * @apiVersion 0.1.0
+     * @apiGroup   Job Category
+     *
+     * @apiParam {Number} id        Category id
+     *
+     * @apiError          NotFound  Category not found
+     * @apiUse Login
+     * @apiUse AdminOnly
+     *
+     */
+
+    /**
+     * delete the category with the given id
+     * @param  Request $request Info about this request
+     * @param  int     $id      Id of category
+     * @return JsonResponse     Response in json format
+     */
+    public function delete(Request $request, $id) : JsonResponse
+    {
+        // check for permissions
+        $error = $this->requireAdmin($request);
+        if ($error) {
+            return $error;
+        }
+
+        // get experience report with given id
+        $category = $this->entityManager
+                              ->find(Entity\JobCategory::class, $id);
+
+        if (!$category) {
+            return $this->app->json(
+              ["error" => "NotFound"],
+              404
+            );
+        }
+
+        // remove this report
+        $this->entityManager->remove($category);
+        $this->entityManager->flush();
+
+        // return success
+        return $this->app->json(
+          ["success" => true],
+          200
+        );
+    }
 }

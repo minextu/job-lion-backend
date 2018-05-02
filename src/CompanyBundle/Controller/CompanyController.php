@@ -202,4 +202,54 @@ class CompanyController extends AbstractController
               200
             );
     }
+
+    /**
+     * @api        {delete} /v1/companies/:id delete
+     * @apiName    deleteCompany
+     * @apiVersion 0.1.0
+     * @apiGroup   Company
+     *
+     * @apiParam {Number} id        Company id
+     *
+     * @apiError          NotFound  Company not found
+     * @apiUse Login
+     * @apiUse AdminOnly
+     *
+     */
+
+    /**
+     * delete the company with the given id
+     * @param  Request $request Info about this request
+     * @param  int     $id      Id of company
+     * @return JsonResponse     Response in json format
+     */
+    public function delete(Request $request, $id) : JsonResponse
+    {
+        // check for permissions
+        $error = $this->requireAdmin($request);
+        if ($error) {
+            return $error;
+        }
+
+        // get the company with given id
+        $company = $this->entityManager
+                              ->find(Company::class, $id);
+
+        if (!$company) {
+            return $this->app->json(
+              ["error" => "NotFound"],
+              404
+            );
+        }
+
+        // remove this report
+        $this->entityManager->remove($company);
+        $this->entityManager->flush();
+
+        // return success
+        return $this->app->json(
+          ["success" => true],
+          200
+        );
+    }
 }

@@ -23,5 +23,6 @@ class CompanyBundle
         $app->post('/v1/companies/', "company.controller:create");
         $app->get('/v1/companies/', "company.controller:list");
         $app->get('/v1/companies/{id}', "company.controller:get");
+        $app->delete('/v1/companies/{id}', "company.controller:delete");
     }
 }

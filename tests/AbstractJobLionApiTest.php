@@ -132,7 +132,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      *
      * @return User   The newly created user
      */
-    protected function createTestUser($email="test@example.com", $password="abc123", $activated=true) : User
+    protected function createTestUser($email="test@example.com", $password="abc123", $activated=true, $isAdmin=false) : User
     {
         $user = new User();
 
@@ -145,6 +145,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
              ->setFirstName($firstName)
              ->setLastName($lastName)
              ->setHash(Password::hash($password))
+             ->setIsAdmin($isAdmin)
              ->setActivated($activated);
 
         $this->getEntityManager()->persist($user);
@@ -205,14 +206,15 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      * Create a test report
      * @return ExperienceReport
      */
-    protected function createTestReport($name="Test Report") : ExperienceReport
+    protected function createTestReport($name="Test Report", $user=false) : ExperienceReport
     {
         // create test category
         $category = $this->createTestJobCategory("Test Category 1");
 
-        // create and login test user
-        $user = $this->createTestUser();
-        $token = $this->loginTestUser();
+        // create test user
+        if (!$user) {
+            $user = $this->createTestUser();
+        }
 
         // create test report
         $report = new ExperienceReport();

@@ -23,5 +23,6 @@ class ExperienceReportBundle
         $app->post('/v1/experienceReports/', "experienceReport.controller:create");
         $app->get('/v1/experienceReports/', "experienceReport.controller:list");
         $app->get('/v1/experienceReports/{id}', "experienceReport.controller:get");
+        $app->delete('/v1/experienceReports/{id}', 'experienceReport.controller:delete');
     }
 }

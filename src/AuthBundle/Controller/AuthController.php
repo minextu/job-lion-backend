@@ -122,6 +122,7 @@ class AuthController extends AbstractController
      * @apiParam {String} password            User password
      *
      * @apiSuccess {String} token             Access token
+     * @apiSuccess {Object} user              The user object for this user
      * @apiSuccess {Number} expire            timestamp for when the token expires
      *
      * @apiError        MissingValues         Some values weren't transmited
@@ -179,7 +180,8 @@ class AuthController extends AbstractController
         return $this->app->json(
           [
             "token" => $jwtToken['token'],
-            "expire" => $jwtToken['data']['exp']
+            "expire" => $jwtToken['data']['exp'],
+            "user" => $user->toArray()
           ],
           200
         );

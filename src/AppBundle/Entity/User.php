@@ -70,6 +70,13 @@ class User
     private $activationCode;
 
     /**
+     * @var string
+     *
+     * @Column(type="boolean", nullable=false)
+     */
+    private $isAdmin;
+
+    /**
     * @var JobCategory[] Job categories, this user added
     *
     * @OneToMany(targetEntity="JobCategory", mappedBy="user")
@@ -101,6 +108,7 @@ class User
     {
         $this->created = new \DateTime();
         $this->activated = false;
+        $this->isAdmin = false;
     }
 
     /**
@@ -225,6 +233,25 @@ class User
     }
 
     /**
+     * @return boolean
+     */
+    public function getIsAdmin()
+    {
+        return $this->isAdmin;
+    }
+
+    /**
+     * @param boolean $isAdmin
+     * @return User
+     */
+    public function setIsAdmin($isAdmin)
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    /**
       * Convert object to info array
       * @return array info array
       */
@@ -234,7 +261,8 @@ class User
            "id" => $this->getId(),
            "email" => $this->getEmail(),
            "firstName" => $this->getFirstName(),
-           "lastName" => $this->getLastName()
+           "lastName" => $this->getLastName(),
+           "isAdmin" => $this->getIsAdmin()
          ];
 
         return $arr;

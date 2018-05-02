@@ -57,6 +57,11 @@ abstract class AbstractController
      */
 
     /**
+     * @apiDefine AdminOnly
+     * @apiError           NoPermissions You don't have permissions
+     */
+
+    /**
      * Check if user is logged in using jwt token
      * @param  Request $request  Info about this request
      * @return JsonResponse      Error response when token is invalid, Empty otherwise
@@ -80,6 +85,28 @@ abstract class AbstractController
               401
             );
         }
+    }
+
+    /**
+     * Check if user is admin
+     * @param  Request $request  Info about this request
+     * @return JsonResponse      Error response when token is invalid, Empty otherwise
+     */
+    protected function requireAdmin(Request $request)
+    {
+        $error = $this->requireLogin($request);
+        if ($error) {
+            return $error;
+        }
+
+        if (!$this->user->getIsAdmin()) {
+            return $this->app->json(
+              ["error" => "NoPermissions"],
+              401
+            );
+        }
+
+        return;
     }
 
     /**

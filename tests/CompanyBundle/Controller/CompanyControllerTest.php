@@ -125,10 +125,13 @@ class CompanyControllerTest extends AbstractJobLionApiTest
      * List Tests
      */
 
-    private function createTestCompanies()
+    private function createTestCompanies($user=false)
     {
         // create and login test user
-        $user = $this->createTestUser();
+        if (!$user) {
+            $user = $this->createTestUser();
+        }
+
         $token = $this->loginTestUser();
 
         // create three test companies
@@ -284,5 +287,106 @@ class CompanyControllerTest extends AbstractJobLionApiTest
 
         // check error text
         $this->assertEquals("NotFound", $answer['error'], "got wrong error");
+    }
+
+    /**
+     * Delete tests
+     */
+
+    public function testCompanyCanBeDeleted()
+    {
+        // create and login test user
+        $user = $this->createTestUser("test@example.com", "abc123", true, true);
+        $this->createTestCompanies($user);
+        $token = $this->loginTestUser();
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/companies/1',
+             array(
+               'jwt' => $token
+             )
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+             200,
+             $client->getResponse()->getStatusCode(),
+             "error: $error, message: $errorMessage"
+           );
+
+        // check if company got deleted
+        $company = $this->getEntityManager()
+                          ->find(Entity\Company::class, 1);
+        $this->assertTrue($company == false, "Company is still in Database");
+    }
+
+    public function testCompanyCanNotBeDeletedWhenLoggedOut()
+    {
+        $this->createTestCompanies();
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/companies/1'
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+          401,
+          $client->getResponse()->getStatusCode(),
+          "error: $error, message: $errorMessage"
+        );
+
+        // check error text
+        $this->assertEquals("NotLoggedIn", $answer['error'], "got wrong error");
+    }
+
+    public function testCompanyCanNotBeDeletedAsNonAdmin()
+    {
+        // create and login test user
+        $user = $this->createTestUser("test@example.com", "abc123", true, false);
+        $this->createTestCompanies($user);
+        $token = $this->loginTestUser();
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+             'DELETE',
+             '/v1/companies/1',
+             array(
+               'jwt' => $token
+             )
+           );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+             401,
+             $client->getResponse()->getStatusCode(),
+             "error: $error, message: $errorMessage"
+        );
+        // check error text
+        $this->assertEquals("NoPermissions", $answer['error'], "got wrong error");
     }
 }
