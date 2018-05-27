@@ -96,7 +96,7 @@ class JobCategoryController extends AbstractController
      *           "name": String,
      *           "user": {
      *             "id" : Number,
-     *             "email": String,
+     *             "avatar": String,
      *             "firstName": String,
      *             "lastName" : String
      *            },
@@ -147,7 +147,7 @@ class JobCategoryController extends AbstractController
      *       "name": String,
      *       "user": {
      *         "id" : Number,
-     *         "email": String,
+     *         "avatar": String,
      *         "firstName": String,
      *         "lastName" : String
      *       },

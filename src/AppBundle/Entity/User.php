@@ -252,6 +252,16 @@ class User
     }
 
     /**
+     * @return string avatar url for this email
+     */
+    public function getAvatar()
+    {
+        $size = 40;
+        $gravUrl = "https://www.gravatar.com/avatar/" . md5(strtolower(trim($this->getEmail()))) . "&s=" . $size;
+        return $gravUrl;
+    }
+
+    /**
       * Convert object to info array
       * @return array info array
       */
@@ -259,7 +269,7 @@ class User
     {
         $arr = [
            "id" => $this->getId(),
-           "email" => $this->getEmail(),
+           "avatar" => $this->getAvatar(),
            "firstName" => $this->getFirstName(),
            "lastName" => $this->getLastName(),
            "isAdmin" => $this->getIsAdmin()

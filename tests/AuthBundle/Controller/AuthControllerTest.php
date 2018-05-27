@@ -218,7 +218,7 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertNotEmpty($answer['user']);
         $userReturn = $answer['user'];
         $this->assertEquals($user->getId(), $userReturn['id']);
-        $this->assertEquals($user->getEmail(), $userReturn['email']);
+        $this->assertEquals($user->getAvatar(), $userReturn['avatar']);
         $this->assertEquals($user->getFirstName(), $userReturn['firstName']);
         $this->assertEquals($user->getLastName(), $userReturn['lastName']);
         $this->assertFalse($userReturn['isAdmin']);
@@ -401,7 +401,6 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertArrayHasKey("user", $answer, "User wasn't returned");
         $user = $answer['user'];
         $this->assertEquals(1, $user['id']);
-        $this->assertEquals($email, $user['email']);
         $this->assertEquals("Test", $user['firstName']);
         $this->assertEquals("Testus", $user['lastName']);
         $this->assertFalse($user['isAdmin']);
@@ -442,7 +441,6 @@ class AuthTest extends AbstractJobLionApiTest
         $this->assertArrayHasKey("user", $answer, "User wasn't returned");
         $user = $answer['user'];
         $this->assertEquals(1, $user['id']);
-        $this->assertEquals($email, $user['email']);
         $this->assertEquals("Test", $user['firstName']);
         $this->assertEquals("Testus", $user['lastName']);
         $this->assertTrue($user['isAdmin']);

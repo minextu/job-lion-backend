@@ -201,7 +201,7 @@ class AuthController extends AbstractController
      *     {
      *         "user" : {
      *               "id": Number,
-     *               "email": String,
+     *               "avatar": String,
      *               "firstName" : String,
      *               "lastName" : String
      *         }

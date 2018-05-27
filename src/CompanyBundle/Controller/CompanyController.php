@@ -168,7 +168,7 @@ class CompanyController extends AbstractController
      *           "title": String,
      *           "user": {
      *             "id": Number,
-     *             "email": String,
+     *             "avatar": String,
      *             "firstName": String,
      *             "lastName": String
      *            },
