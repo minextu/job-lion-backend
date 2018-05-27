@@ -18,7 +18,6 @@ abstract class AbstractJobLionApiTest extends WebTestCase
 {
     use TestCaseTrait;
 
-    private $pdo = null;
     private $conn = null;
     private $entityManager = null;
     private static $configFile = null;
@@ -50,12 +49,12 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         }
 
         $this->entityManager = AppBundle::createEntityManager(self::$configFile, true);
-        $this->pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
 
         if (self::$inMemory) {
-            $this->conn = $this->createDefaultDBConnection($this->pdo, ':memory:');
+            $this->conn = $this->createDefaultDBConnection($pdo, ':memory:');
         } else {
-            $this->conn = $this->createDefaultDBConnection($this->pdo, ':mysql:');
+            $this->conn = $this->createDefaultDBConnection($pdo, ':mysql:');
         }
 
         return $this->conn;
@@ -96,7 +95,7 @@ abstract class AbstractJobLionApiTest extends WebTestCase
      */
     public function setUp()
     {
-        parent::setup();
+        parent::setUp();
 
         // delete possible existing tables if using mysql
         if (!self::$inMemory) {
@@ -108,21 +107,29 @@ abstract class AbstractJobLionApiTest extends WebTestCase
         $schemaTool->createSchema($this->getEntityManager()->getMetadataFactory()->getAllMetadata());
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->getEntityManager()->close();
+        $this->conn->close();
+    }
+
     /**
      * Remove all tables in test database
      */
     private function dropTables()
     {
+        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
         $sql = "SHOW TABLES";
-        $this->pdo->query("set foreign_key_checks=0");
+        $pdo->query("set foreign_key_checks=0");
 
-        $tables = $this->pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        $tables = $pdo->query($sql)->fetchAll(PDO::FETCH_COLUMN);
         foreach ($tables as $table) {
             $sql = "DROP TABLE `$table`";
-            $this->pdo->prepare($sql)->execute();
+            $pdo->prepare($sql)->execute();
         }
 
-        $this->pdo->query("set foreign_key_checks=1");
+        $pdo->query("set foreign_key_checks=1");
     }
 
     /**
