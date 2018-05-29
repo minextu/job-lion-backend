@@ -105,14 +105,15 @@ class JobCategory
 
     /**
       * Convert object to info array
+      * @param boolean $forAdmin
       * @return array       info array
       */
-    public function toArray()
+    public function toArray($forAdmin = false)
     {
         return [
           'id' => $this->getId(),
           'name' => $this->getName(),
-          'user' => $this->getUser()->toArray(),
+          'user' => $this->getUser()->toArray($forAdmin),
           'created' => $this->getCreated()->format(\DateTime::ATOM)
         ];
     }

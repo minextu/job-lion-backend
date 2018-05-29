@@ -263,9 +263,10 @@ class User
 
     /**
       * Convert object to info array
+      * @param boolean $forAdmin
       * @return array info array
       */
-    public function toArray()
+    public function toArray($forAdmin=false)
     {
         $arr = [
            "id" => $this->getId(),
@@ -274,6 +275,10 @@ class User
            "lastName" => $this->getLastName(),
            "isAdmin" => $this->getIsAdmin()
          ];
+
+        if ($forAdmin) {
+            $arr['email'] = $this->getEmail();
+        }
 
         return $arr;
     }

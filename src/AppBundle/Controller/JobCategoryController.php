@@ -119,8 +119,8 @@ class JobCategoryController extends AbstractController
                                 ->getRepository(Entity\JobCategory::class)
                                 ->findAll();
         // get info array
-        array_walk($jobCategories, function (&$value, &$key) {
-            $value = $value->toArray();
+        array_walk($jobCategories, function (&$value, &$key) use ($request) {
+            $value = $value->toArray($this->isAdmin($request));
         });
 
         // return all categories
@@ -176,7 +176,7 @@ class JobCategoryController extends AbstractController
 
         // return all categories
         return $this->app->json(
-          $jobCategory->toArray(),
+          $jobCategory->toArray($this->isAdmin($request)),
           200
         );
     }

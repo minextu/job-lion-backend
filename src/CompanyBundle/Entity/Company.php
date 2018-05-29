@@ -107,14 +107,15 @@ class Company
 
     /**
       * Convert object to info array
+      * @param boolean $forAdmin
       * @return array       info array
       */
-    public function toArray()
+    public function toArray($forAdmin = false)
     {
         return [
           'id' => $this->getId(),
           'title' => $this->getTitle(),
-          'user' => $this->getUser()->toArray(),
+          'user' => $this->getUser()->toArray($forAdmin),
           'created' => $this->getCreated()->format(\DateTime::ATOM)
         ];
     }

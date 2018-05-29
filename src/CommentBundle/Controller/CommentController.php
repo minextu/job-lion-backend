@@ -133,8 +133,8 @@ class CommentController extends AbstractController
                                 ->findByExperienceReport($experienceReportId, $offset, $limit);
 
         // get info array
-        array_walk($comments, function (&$value, &$key) {
-            $value = $value->toArray(true);
+        array_walk($comments, function (&$value, &$key) use ($request) {
+            $value = $value->toArray($this->isAdmin($request));
         });
 
         // return all categories

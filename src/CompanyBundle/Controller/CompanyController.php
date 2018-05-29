@@ -136,7 +136,7 @@ class CompanyController extends AbstractController
         // get info array
         $companyInfos = [];
         foreach ($companies as $company) {
-            $companyInfos[] = $company->toArray();
+            $companyInfos[] = $company->toArray($this->isAdmin($request));
         }
 
         // return all companies
@@ -198,7 +198,7 @@ class CompanyController extends AbstractController
 
         // return report
         return $this->app->json(
-              $company->toArray(),
+              $company->toArray($request),
               200
             );
     }

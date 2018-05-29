@@ -258,7 +258,7 @@ class CompanyControllerTest extends AbstractJobLionApiTest
 
         $this->assertEquals(1, $company['id'], "Id is not valid");
         $this->assertEquals("Company 1", $company['title'], "Title is not valid");
-        $this->assertEquals($user->toArray(), $company['user'], "User is not valid");
+        $this->assertEquals($user->toArray(true), $company['user'], "User is not valid");
     }
 
     public function testCompanyWithWrongIdCanNotBeReturned()

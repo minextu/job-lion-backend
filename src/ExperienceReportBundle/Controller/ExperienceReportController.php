@@ -184,7 +184,7 @@ class ExperienceReportController extends AbstractController
         // get info array
         $reportInfos = [];
         foreach ($experienceReports as $report) {
-            $reportInfos[] = $report->toArray();
+            $reportInfos[] = $report->toArray($this->isAdmin($request));
         }
 
         // return all categories
@@ -246,7 +246,7 @@ class ExperienceReportController extends AbstractController
 
         // return report
         return $this->app->json(
-          $experienceReport->toArray(),
+          $experienceReport->toArray($this->isAdmin($request)),
           200
         );
     }

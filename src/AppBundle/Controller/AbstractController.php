@@ -69,16 +69,7 @@ abstract class AbstractController
     protected function requireLogin(Request $request)
     {
         try {
-            // extract jwt token
-            $tokenString = $request->get('jwt');
-            if (empty($tokenString)) {
-                throw new AuthBundle\Exception("No jwt token provided");
-            }
-
-            // extract user out of token
-            $token = new Token($this->configFile, $this->entityManager);
-            $this->user = $token->getUser($tokenString);
-            return;
+            $this->user = $this->getUser($request);
         } catch (AuthBundle\Exception $e) {
             return $this->app->json(
               ["error" => "NotLoggedIn", "errorMessage" => $e->getMessage()],
@@ -110,6 +101,20 @@ abstract class AbstractController
     }
 
     /**
+     * Check wether this user is Admin or not
+     * @return boolean
+     */
+    protected function isAdmin(Request $request)
+    {
+        try {
+            $user = $this->getUser($request);
+            return $user->getIsAdmin();
+        } catch (AuthBundle\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Generate api url for new resources
      * @param  string $resource Api path
      * @param  int $id          Id of new resource
@@ -118,5 +123,22 @@ abstract class AbstractController
     protected function generateUrl($resource, $id)
     {
         return "/api/v1/$resource/$id";
+    }
+
+    /**
+     * Create a user object using the jwt token
+     * @return User
+     */
+    private function getUser(Request $request)
+    {
+        // extract jwt token
+        $tokenString = $request->get('jwt');
+        if (empty($tokenString)) {
+            throw new AuthBundle\Exception("No jwt token provided");
+        }
+
+        // extract user out of token
+        $token = new Token($this->configFile, $this->entityManager);
+        return $token->getUser($tokenString);
     }
 }

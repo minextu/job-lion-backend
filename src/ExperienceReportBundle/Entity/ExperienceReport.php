@@ -186,14 +186,15 @@ class ExperienceReport
 
     /**
       * Convert object to info array
+      * @param boolean $forAdmin
       * @return array info array
       */
-    public function toArray()
+    public function toArray($forAdmin)
     {
         $jobCategories = $this->getJobCategories();
         $categoryArray = [];
         foreach ($jobCategories as $category) {
-            $categoryArray[] = $category->toArray();
+            $categoryArray[] = $category->toArray($forAdmin);
         }
 
         return [
@@ -201,8 +202,8 @@ class ExperienceReport
           "title" => $this->getTitle(),
           "text" => $this->getText(),
           "jobCategories" => $categoryArray,
-          "company" => $this->getCompany() ? $this->getCompany()->toArray() : null,
-          "user" => $this->getUser()->toArray(),
+          "company" => $this->getCompany() ? $this->getCompany()->toArray($forAdmin) : null,
+          "user" => $this->getUser()->toArray($forAdmin),
           "created" => $this->getCreated()->format(\DateTime::ATOM)
       ];
     }
