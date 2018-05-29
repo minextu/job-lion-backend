@@ -499,7 +499,7 @@ class AuthTest extends AbstractJobLionApiTest
           '/v1/auth/activate',
           array(
             "user" => $user->getId(),
-            "code" => $code)
+            "activationCode" => $code)
       );
 
         // decode answer
@@ -538,7 +538,7 @@ class AuthTest extends AbstractJobLionApiTest
           '/v1/auth/activate',
           array(
             "user" => $user->getId(),
-            "code" => $code)
+            "activationCode" => $code)
       );
 
         // decode answer
@@ -555,7 +555,7 @@ class AuthTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("Invalid", $answer['error'], "got wrong error");
+        $this->assertEquals("InvalidActivationCode", $answer['error'], "got wrong error");
     }
 
     public function testUserCanNotBeActivatedWithWrongUserId()
@@ -576,7 +576,7 @@ class AuthTest extends AbstractJobLionApiTest
           '/v1/auth/activate',
           array(
             "user" => 9999,
-            "code" => $code)
+            "activationCode" => $code)
       );
 
         // decode answer
@@ -593,6 +593,6 @@ class AuthTest extends AbstractJobLionApiTest
         );
 
         // check error text
-        $this->assertEquals("Invalid", $answer['error'], "got wrong error");
+        $this->assertEquals("InvalidActivationCode", $answer['error'], "got wrong error");
     }
 }

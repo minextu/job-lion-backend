@@ -32,7 +32,7 @@ class ConfirmationMail
         $user->setActivationCode($code);
 
         // generate the activation url
-        $url = "http://" . $_SERVER['SERVER_NAME'] . "/api/v1/auth/activate?user=" . $user->getId() . "&code=" . $code;
+        $url = "http://" . $_SERVER['SERVER_NAME'] . "/Aktivieren/" . $user->getId() . "?code=" . $code;
 
         // set subject and text
         $subject = "Willkommen bei JobLion! Bitte die E-Mailadresse bestätigen";
@@ -41,8 +41,8 @@ class ConfirmationMail
 						Danke für die Registrierung bei JobLion! Um das Konto zu aktivieren, bitte auf den Link unter diesem Text klicken.<br>
 						Dadurch kann die E-Mail Adresse verifiziert werden.
 					</p>
-					<a href='$url'>E-Mail bestätigen</a><br>(<a href='$url'>$url</a>)
-
+					<a href='$url'>E-Mail bestätigen</a><br>(<a href='$url'>$url</a>)<br>
+          Oder Bestätigungscode manuell eingeben: <i>$code</i>
 					<p>
 						Nach der Bestätigung ist das JobLion Konto direkt freigeschaltet.
 					</p>

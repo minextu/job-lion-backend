@@ -235,10 +235,10 @@ class AuthController extends AbstractController
      * @apiGroup   Auth
      *
      * @apiParam {Number} user                User id
-     * @apiParam {String} code                Confirmation code
+     * @apiParam {String} activationCode      Confirmation code
      *
      * @apiError        MissingValues         Some values weren't transmited
-     * @apiError        Invalid               Id or code wrong
+     * @apiError        InvalidActivationCode Id or activationCode wrong
      * @apiErrorExample Error-Response:
      * HTTP/1.1 400 Bad Request
      * {
@@ -254,7 +254,7 @@ class AuthController extends AbstractController
     public function activate(Request $request)
     {
         $userId = $request->get('user');
-        $code = $request->get('code');
+        $code = $request->get('activationCode');
 
         // check for missing values
         if (!$userId || !$code) {
@@ -269,7 +269,7 @@ class AuthController extends AbstractController
 
         if (!$user || $user->getActivationCode() !== $code) {
             return $this->app->json(
-              ["error" => "Invalid"],
+              ["error" => "InvalidActivationCode"],
               400
             );
         }
