@@ -198,7 +198,7 @@ class CompanyController extends AbstractController
 
         // return report
         return $this->app->json(
-              $company->toArray($request),
+              $company->toArray($this->isAdmin($request)),
               200
             );
     }

@@ -258,7 +258,7 @@ class CompanyControllerTest extends AbstractJobLionApiTest
 
         $this->assertEquals(1, $company['id'], "Id is not valid");
         $this->assertEquals("Company 1", $company['title'], "Title is not valid");
-        $this->assertEquals($user->toArray(true), $company['user'], "User is not valid");
+        $this->assertEquals($user->toArray(), $company['user'], "User is not valid");
     }
 
     public function testCompanyWithWrongIdCanNotBeReturned()
@@ -287,6 +287,43 @@ class CompanyControllerTest extends AbstractJobLionApiTest
 
         // check error text
         $this->assertEquals("NotFound", $answer['error'], "got wrong error");
+    }
+
+    public function testCompanyWillReturnExtraValuesAsAdmin()
+    {
+        $user = $this->createTestCompanies();
+        $this->createTestUser("admin@example.com", "abc123", true, true);
+        $token = $this->loginTestUser("admin@example.com", "abc123");
+
+        // send request
+        $client = $this->createClient();
+        $crawler = $client->request(
+            'GET',
+            '/v1/companies/1',
+            array(
+              'jwt' => $token
+            )
+          );
+
+        // decode answer
+        $answer = $client->getResponse()->getContent();
+        $answer = json_decode($answer, true);
+        $error = isset($answer['error']) ? $answer['error'] : false;
+        $errorMessage = isset($answer['message']) ? $answer['message'] : false;
+
+        // check return code
+        $this->assertEquals(
+            200,
+            $client->getResponse()->getStatusCode(),
+            "error: $error, message: $errorMessage"
+          );
+
+        // check response
+        $company = $answer;
+
+        $this->assertEquals(1, $company['id'], "Id is not valid");
+        $this->assertEquals("Company 1", $company['title'], "Title is not valid");
+        $this->assertEquals($user->toArray(true), $company['user'], "User is not valid");
     }
 
     /**
