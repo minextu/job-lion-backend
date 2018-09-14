@@ -6,8 +6,8 @@
 Backend (API) for Job-Lion
 
 Documentation:
-[API](https://staging.job-lion.et.tc/api/apidoc),
-[Classes](https://staging.job-lion.et.tc/api/docs)
+[API](https://api.staging.job-lion.et.tc/apidoc),
+[Classes](https://api.staging.job-lion.et.tc/docs)
 
 ## Development
 You will need to setup apache, php, mysql (e.g. [xampp](https://www.apachefriends.org/index.html)) and [composer](https://getcomposer.org/).
